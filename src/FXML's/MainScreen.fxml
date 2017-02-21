@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="948.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerForTable">
+  <tabs>
+    <Tab text="Untitled Tab 1">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+      </content>
+    </Tab>
+    <Tab text="Untitled Tab 2">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Button layoutX="45.0" layoutY="29.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="171.0" layoutY="29.0" mnemonicParsing="false" text="Button" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="User List">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="540.0" prefWidth="948.0">
+               <children>
+                  <Pane layoutY="228.0" prefHeight="384.0" prefWidth="925.0">
+                     <children>
+                        <TableView fx:id="tableUser" editable="true" layoutX="1.0" layoutY="58.0" prefHeight="326.0" prefWidth="948.0">
+                          <columns>
+                            <TableColumn fx:id="c1" prefWidth="107.0" text="Student ID" />
+                            <TableColumn fx:id="c2" prefWidth="99.0" text="Password" />
+                              <TableColumn fx:id="c3" prefWidth="101.0" text="First Name" />
+                              <TableColumn fx:id="c4" prefWidth="121.0" text="Last Name" />
+                              <TableColumn fx:id="c5" prefWidth="164.0" text="Phone Number" />
+                              <TableColumn fx:id="c6" prefWidth="180.0" text="Email" />
+                              <TableColumn fx:id="c7" prefWidth="172.0" text="Admin Permissions" />
+                          </columns>
+                        </TableView>
+                        <Button fx:id="btnLoad" layoutX="712.0" layoutY="1.0" mnemonicParsing="false" onAction="#loadDataFromDatabase" prefHeight="37.0" prefWidth="165.0" text="Load Users" />
+                        <Text layoutX="55.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+                     </children>
+                  </Pane>
+                  <TextField fx:id="idfield" layoutX="142.0" layoutY="14.0" />
+                  <TextField fx:id="passwordfield" layoutX="142.0" layoutY="57.0" />
+                  <TextField fx:id="firstnamefield" layoutX="142.0" layoutY="101.0" />
+                  <TextField fx:id="lastnamefield" layoutX="142.0" layoutY="144.0" />
+                  <TextField fx:id="phonenumberfield" layoutX="142.0" layoutY="187.0" />
+                  <TextField fx:id="emailfield" layoutX="142.0" layoutY="237.0" />
+                  <Button layoutX="353.0" layoutY="18.0" mnemonicParsing="false" onAction="#updateInfo" prefHeight="52.0" prefWidth="121.0" text="Update" />
+                  <Text layoutX="47.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="StudentID" />
+                  <Text layoutX="49.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+                  <Text layoutX="49.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name" />
+                  <Text layoutX="49.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name" />
+                  <Text layoutX="36.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number" />
+                  <Button layoutX="353.0" layoutY="88.0" mnemonicParsing="false" onAction="#removeUser" prefHeight="52.0" prefWidth="121.0" text="Delete User" />
+               </children></AnchorPane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>
