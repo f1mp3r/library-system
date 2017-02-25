@@ -5,13 +5,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+import javax.xml.soap.Text;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 public class TableViewControls {
-
 
 
     ConnectionManager conn;
@@ -77,7 +78,6 @@ public class TableViewControls {
     }
 
 
-
     public void updateInfoUsers(TextField studentidfield, TextField passwordfield, TextField firstnamefield,
                                 TextField lastnamefield, TextField phonenumberfield, TextField emailfield, TextField id) {
 
@@ -111,5 +111,40 @@ public class TableViewControls {
     }
 
 
-}
+    public void getRowInfoUsers(TableView tableUser, TextField idfield, TextField emailfield, TextField phonenumberfield,
+                                TextField firstnamefield, TextField lastnamefield) {
+        if (tableUser.getSelectionModel().getSelectedItem() != null) {
+            TableView.TableViewSelectionModel selectionModel = tableUser.getSelectionModel();
 
+
+            ObservableList selectedCells;
+            selectedCells = selectionModel.getSelectedCells();
+
+
+            TablePosition tablePosition = (TablePosition) selectedCells.get(0);
+
+
+            tablePosition.getTableView().getSelectionModel().getTableView().getId();
+
+            Object getbothvalue = tableUser.getSelectionModel().getSelectedItem().toString();
+            //gives you first column value..
+
+            Object row1 = getbothvalue.toString().split(",")[0].substring(1);
+            Object row2 = getbothvalue.toString().split(",")[1].substring(1);
+            Object row3 = getbothvalue.toString().split(",")[2].substring(1);
+            Object row4 = getbothvalue.toString().split(",")[3].substring(1);
+            Object row5 = getbothvalue.toString().split(",")[4].substring(1);
+            Object row6 = getbothvalue.toString().split(",")[5].substring(1);
+            Object row7 = getbothvalue.toString().split(",")[6].substring(1);
+            Object row8 = getbothvalue.toString().split(",")[7].substring(1);
+            Object row9 = getbothvalue.toString().split(",")[8].substring(1);
+            idfield.setText(row6.toString());
+            emailfield.setText(row2.toString());
+            phonenumberfield.setText(row9.toString());
+            firstnamefield.setText(row4.toString());
+            lastnamefield.setText(row5.toString());
+        }
+
+
+    }
+}
