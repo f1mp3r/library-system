@@ -1,6 +1,5 @@
 package app.utils;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,8 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 /**
  * Created by Chris on 22.2.2017 г..
@@ -20,6 +18,19 @@ public class Screen {
 
     public Screen(Class context) {
         this.context = context;
+    }
+
+    public static void popup(String type, ArrayList<String> message) {
+        System.out.println(message);
+        Alert alert = new Alert(Alert.AlertType.valueOf(type));
+        alert.setContentText(message.toString().substring(1).replaceFirst("]", "").replace(", ", ""));
+        alert.showAndWait();
+    }
+
+    public static void popup(String type, String message) {
+        Alert alert = new Alert(Alert.AlertType.valueOf(type));
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void loadView(String viewFile, String title) {
@@ -34,19 +45,5 @@ public class Screen {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-
-    public static void popup(String type, ArrayList<String> message) {
-        System.out.println(message);
-        Alert alert = new Alert(Alert.AlertType.valueOf(type));
-        alert.setContentText(message.toString().substring(1).replaceFirst("]", "").replace(", ", ""));
-        alert.showAndWait();
-    }
-
-    public static void popup(String type, String message) {
-        Alert alert = new Alert(Alert.AlertType.valueOf(type));
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

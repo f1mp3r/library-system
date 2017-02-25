@@ -8,11 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-
 import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Chris on 21.2.2017 г..
@@ -22,9 +18,9 @@ public class UserAuthenticationController {
     @FXML
     private Button login;
     @FXML
-    private TextField usertext;
+    private TextField usertext, staffusertext;
     @FXML
-    private PasswordField passwordtext;
+    private PasswordField passwordtext, staffpasswordtext;
     @FXML
     private Label label;
 
@@ -40,6 +36,7 @@ public class UserAuthenticationController {
     private TextField reg6;
     @FXML
     private TextField reg1;
+
 
     private String username;
     private String password;
@@ -72,8 +69,33 @@ public class UserAuthenticationController {
         }
     }
 
+    @FXML
+    public void onStaffLoginButtonClick(ActionEvent event) throws IOException {
+        username = staffusertext.getText().toString();
+        password = staffpasswordtext.getText().toString();
+        if (users.login(username, password)) {
+            label.setText("Logged In");
+            // todo: remove when not needed
+            System.out.println("yay");
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+
+            this.loadLibraryHomeScreenViewForStaff();
+        } else {
+            label.setText("Invalid Login");
+            // todo: remove when not needed
+            System.out.println("nay");
+        }
+
+
+
+
+    }
+
     public void loadLibraryHomeScreenView() throws IOException {
-        this.screen.loadView("MainScreen", "Navigation");
+        this.screen.loadView("MainScreenUser", "Navigation");
+    }
+    public void loadLibraryHomeScreenViewForStaff() throws IOException {
+        this.screen.loadView("MainScreenStaff", "Navigation");
     }
 
     @FXML
@@ -83,7 +105,8 @@ public class UserAuthenticationController {
 
     @FXML
     void onRegisterSubmit(ActionEvent event) throws IOException {
-        if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.passwordValidation(reg6.getText())){
+        if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.passwordValidation(reg6.getText()) && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText()) &&
+                InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())){
 
             users.addUser(reg1.getText(), reg6.getText(), reg2.getText(), reg3.getText(), reg4.getText(), reg5.getText(), false);
              Screen.popup("CONFIRMATION", "Registration Successful");
@@ -94,4 +117,21 @@ public class UserAuthenticationController {
             InputValidation.getErrorList().clear();
         }
     }
+
+    @FXML
+    void onMemberLogin(ActionEvent event) throws IOException {
+        this.screen.loadView("UserLogin", "Registration");
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+
+
+    }
+
+    @FXML
+    void onStaffLogin(ActionEvent event) throws IOException {
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+        this.screen.loadView("StaffLogin", "StaffLogin");
+
+    }
+
+
 }

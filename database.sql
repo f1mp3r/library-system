@@ -20,3 +20,16 @@ ALTER TABLE `users`
    MODIFY COLUMN `id` INT AUTO_INCREMENT;
 
 
+   
+   CREATE TABLE `books` (
+  `id` int(11) NOT NULL,
+  `Title` varchar(80) NOT NULL,
+  `Author` varchar(60) NOT NULL,
+  `Isbn` varchar(20) NOT NULL,
+  `Location` varchar(20) NOT NULL,
+  `Copies` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `books`
+  ADD PRIMARY KEY (`id`)
+  

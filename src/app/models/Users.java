@@ -35,6 +35,7 @@ public class Users extends Model {
             statement.setString(1, studentId);
             statement.setString(2, Users.hash(password));
 
+
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return true;
@@ -48,6 +49,7 @@ public class Users extends Model {
         return false;
     }
 
+
     public void addUser(String addstudentID, String addpassword, String addfirstName, String addlastName, String addphoneNumber,
                         String addemail, boolean addpermission) {
         try {
@@ -55,7 +57,6 @@ public class Users extends Model {
 
             Users users = new Users();
             HashMap data = new HashMap();
-
 
 
             data.put("email", addemail);

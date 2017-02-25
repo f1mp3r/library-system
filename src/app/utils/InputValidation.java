@@ -1,15 +1,9 @@
 package app.utils;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.xml.soap.Text;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -68,6 +62,15 @@ public class InputValidation {
         return result;
 
 
+    }
+
+    public static boolean lengthCheck(String wordToCheck) {
+        boolean result = true;
+        if (wordToCheck.length() <= 0) {
+            errorList.add("You missed an entry" + '\n');
+            result = false;
+        }
+             return result;
     }
 
 }

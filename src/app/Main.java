@@ -15,19 +15,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         // region make an admin
         Users users = new Users();
-        HashMap data = new HashMap();
-        data.put("email", "admin@library.com");
-        data.put("first_name", "None");
-        data.put("last_name", "None");
-        data.put("student_id", "");
-        data.put("password", Users.hash("random"));
-        data.put("permission", true);
-//        users.insert(data);
+
+     //  users.addUser("random", "random", "Admin", "Admin","666666", "admin@library.com", false);
+
         // endregion
 
-        Parent root = FXMLLoader.load(getClass().getResource("../views/FirstScreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../views/ChooseScreen.fxml"));
         primaryStage.setTitle("The Librarian");
-        primaryStage.setScene(new Scene(root, 650, 320));
+        primaryStage.setScene(new Scene(root, 380, 320));
         primaryStage.show();
 
     }
