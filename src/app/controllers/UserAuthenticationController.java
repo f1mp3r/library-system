@@ -73,7 +73,7 @@ public class UserAuthenticationController {
     public void onStaffLoginButtonClick(ActionEvent event) throws IOException {
         username = staffusertext.getText().toString();
         password = staffpasswordtext.getText().toString();
-        if (users.login(username, password)) {
+        if (users.loginstaff(username, password)) {
             label.setText("Logged In");
             // todo: remove when not needed
             System.out.println("yay");

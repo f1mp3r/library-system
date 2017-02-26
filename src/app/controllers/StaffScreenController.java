@@ -1,19 +1,15 @@
 package app.controllers;
 
 import app.utils.TableViewControls;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
+
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +22,24 @@ import java.util.ResourceBundle;
 public class StaffScreenController implements Initializable {
 
     TableViewControls twg = new TableViewControls();
+
+    @FXML
+    private TextField bookidtextfield;
+
+    @FXML
+    private TextField booktitlefield;
+
+    @FXML
+    private TextField bookauthorfield;
+
+    @FXML
+    private TextField bookisbnfield;
+
+    @FXML
+    private TextField booklocationfield;
+
+    @FXML
+    private TextField bookcopiesfield;
     @FXML
     private TableView tableUser;
     @FXML
@@ -43,20 +57,25 @@ public class StaffScreenController implements Initializable {
     @FXML
     private TextField emailfield;
 
+    @FXML
+    private TableView tableBooksForStaff;
+    @FXML
+    private Tab tabBooksStaff;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
 
         tabUserList.setOnSelectionChanged(t -> twg.setTable("users", tableUser));
 
-        tableUser.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                twg.getRowInfoUsers(tableUser, idfield,emailfield,firstnamefield,lastnamefield,phonenumberfield);
+        tableUser.setOnMouseClicked(event -> twg.getRowId(tableUser));
 
-                }
+        tabBooksStaff.setOnSelectionChanged(event -> tabBooksStaff.setOnSelectionChanged(t -> twg.setTable("books", tableBooksForStaff)));
 
-            });
+        tableBooksForStaff.setOnMouseClicked(event -> twg.getRowId(tableBooksForStaff));
+
+
+
 
 
 
@@ -65,6 +84,12 @@ public class StaffScreenController implements Initializable {
     @FXML
     void generateTable(ActionEvent event) {
         twg.setTable("users", tableUser);
+
+
+    }
+
+    @FXML
+    void updateBookInfo(ActionEvent event) {
 
 
     }

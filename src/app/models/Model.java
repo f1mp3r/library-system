@@ -2,7 +2,6 @@ package app.models;
 
 import app.utils.ConnectionManager;
 import com.mysql.jdbc.PreparedStatement;
-
 import java.sql.SQLException;
 import java.util.*;
 
@@ -51,4 +50,5 @@ public class Model {
 
         return rowsChanged;
     }
+
 }

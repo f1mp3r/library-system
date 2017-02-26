@@ -1,7 +1,9 @@
 package app;
 
+import app.models.Books;
 import app.models.Users;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,10 +15,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // region make an admin
-        Users users = new Users();
 
-     //  users.addUser("random", "random", "Admin", "Admin","666666", "admin@library.com", false);
+        Users users = new Users();
+        Books books = new Books();
+        HashMap bookData = new HashMap();
+        HashMap<String, ObservableList> bookupdate = new HashMap<>();
+
+
+                  //add a book
+        // books.addBook("4656566","Soup", "Kitchen",3,0,"elo");
+
+        // region make an admin
+     //users.addUser("random", "random", "Admin", "Admin","666666", "admin@llibrary.com", true);
 
         // endregion
 

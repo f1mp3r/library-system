@@ -31,9 +31,33 @@ public class Users extends Model {
 
         try {
             Connection connection = this.connection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `users` WHERE student_Id = ? AND password = ? ");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `users` WHERE student_Id = ? AND password = ? AND permission = ? ");
             statement.setString(1, studentId);
             statement.setString(2, Users.hash(password));
+            statement.setBoolean(3, false);
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception exc) {
+            System.out.println(exc.getMessage());
+        }
+
+        return false;
+    }
+
+    public boolean loginstaff(String studentId, String password) {
+        ResultSet resultSet;
+
+        try {
+            Connection connection = this.connection.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `users` WHERE student_Id = ? AND password = ? AND permission = ?");
+            statement.setString(1, studentId);
+            statement.setString(2, Users.hash(password));
+            statement.setBoolean(3, true);
 
 
             resultSet = statement.executeQuery();
@@ -66,6 +90,7 @@ public class Users extends Model {
             data.put("password", Users.hash(addpassword));
             data.put("permission", addpermission);
             data.put("phone_number",addphoneNumber);
+            
             users.insert(data);
 
 
