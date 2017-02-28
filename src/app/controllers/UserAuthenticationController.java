@@ -8,7 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by Chris on 21.2.2017 г..
@@ -55,7 +57,7 @@ public class UserAuthenticationController {
         username = usertext.getText().toString();
         password = passwordtext.getText().toString();
 
-        if (users.login(username, password)) {
+        if (users.loginUser(username, password)) {
             label.setText("Logged In");
             // todo: remove when not needed
             System.out.println("yay");
@@ -73,7 +75,7 @@ public class UserAuthenticationController {
     public void onStaffLoginButtonClick(ActionEvent event) throws IOException {
         username = staffusertext.getText().toString();
         password = staffpasswordtext.getText().toString();
-        if (users.loginstaff(username, password)) {
+        if (users.loginStaff(username, password)) {
             label.setText("Logged In");
             // todo: remove when not needed
             System.out.println("yay");
@@ -87,13 +89,12 @@ public class UserAuthenticationController {
         }
 
 
-
-
     }
 
     public void loadLibraryHomeScreenView() throws IOException {
         this.screen.loadView("MainScreenUser", "Navigation");
     }
+
     public void loadLibraryHomeScreenViewForStaff() throws IOException {
         this.screen.loadView("MainScreenStaff", "Navigation");
     }
@@ -105,14 +106,22 @@ public class UserAuthenticationController {
 
     @FXML
     void onRegisterSubmit(ActionEvent event) throws IOException {
-        if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.passwordValidation(reg6.getText()) && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText()) &&
-                InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())){
+        if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.passwordValidation(reg6.getText())
+                && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText())
+                && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())) {
 
-            users.addUser(reg1.getText(), reg6.getText(), reg2.getText(), reg3.getText(), reg4.getText(), reg5.getText(), false);
-             Screen.popup("CONFIRMATION", "Registration Successful");
+            HashMap newUser = new HashMap();
+            newUser.put("student_id", reg1.getText());
+            newUser.put("password", reg6.getText());
+            newUser.put("firstName", reg2.getText());
+            newUser.put("lastName", reg3.getText());
+            newUser.put("phone_number", reg4.getText());
+            newUser.put("email", reg5.getText());
+            newUser.put("permission", false);
+            users.insert(newUser);
+            Screen.popup("CONFIRMATION", "Registration Successful");
             ((Node) (event.getSource())).getScene().getWindow().hide();
-
-        }else {
+        } else {
             Screen.popup("ERROR", InputValidation.getErrorList());
             InputValidation.getErrorList().clear();
         }
@@ -122,8 +131,6 @@ public class UserAuthenticationController {
     void onMemberLogin(ActionEvent event) throws IOException {
         this.screen.loadView("UserLogin", "Registration");
         ((Node) (event.getSource())).getScene().getWindow().hide();
-
-
     }
 
     @FXML

@@ -43,7 +43,6 @@ public class Model {
                 Map.Entry mapElement = (Map.Entry) i.next();
                 statement.setObject(k++, mapElement.getValue());
             }
-//            System.out.println(statement.asSql());
 
             statement.execute();
             rowsChanged = statement.getUpdateCount();
@@ -89,7 +88,13 @@ public class Model {
         return rowsChanged;
     }
 
-    public HashMap getByColumn(String column, int id) {
+    /**
+     * Returns table entry if such exists matching the column and value
+     * @param column
+     * @param id
+     * @return
+     */
+    public HashMap getByColumn(String column, String id) {
         HashMap<String, String> result = new HashMap();
         try {
             String selectQuery = String.format("SELECT * FROM `" + this.table + "` WHERE `%s` = %d", column, id);
@@ -100,6 +105,10 @@ public class Model {
             while (resultSet.next()) {
                 for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                     String columnName = resultSet.getMetaData().getColumnName(i);
+                    if (this.hiddenFields.contains(columnName)) {
+                        continue;
+                    }
+
                     result.put(columnName, resultSet.getObject(i).toString());
                 }
             }
@@ -112,8 +121,19 @@ public class Model {
         return result;
     }
 
+    /**
+     * Returns table entry by given ID
+     * @param id
+     * @return
+     */
     public HashMap getById(int id) {
-        return this.getByColumn("id", id);
+        return this.getByColumn("id", String.valueOf(id));
+    }
+
+    public ArrayList<HashMap> getAll() {
+        String query = String.format("SELECT * FROM `%s`", this.table);
+        System.out.println(query);
+        return null;
     }
 
     public String toString() {

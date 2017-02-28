@@ -16,20 +16,24 @@ public class Users extends Model {
         super();
         this.table = "users";
         this.hiddenFields.add("password");
-        this.columns.add("email");
-        this.columns.add("first_name");
-        this.columns.add("last_name");
     }
 
-    public static String hash(String input) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update(input.getBytes());
-        byte[] digest = md.digest();
-        String newHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+    public static String hash(String input) {
+        String newHash = input;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(input.getBytes());
+            byte[] digest = md.digest();
+            newHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(e.getMessage());
+        }
+
         return newHash;
     }
 
-    public boolean login(String studentId, String password) {
+    public boolean login(String studentId, String password, boolean staffOnly) {
         ResultSet resultSet;
 
         try {
@@ -37,7 +41,7 @@ public class Users extends Model {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM `users` WHERE student_Id = ? AND password = ? AND permission = ? ");
             statement.setString(1, studentId);
             statement.setString(2, Users.hash(password));
-            statement.setBoolean(3, false);
+            statement.setBoolean(3, staffOnly);
 
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -52,53 +56,17 @@ public class Users extends Model {
         return false;
     }
 
-    public boolean loginstaff(String studentId, String password) {
-        ResultSet resultSet;
-
-        try {
-            Connection connection = this.connection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `users` WHERE student_Id = ? AND password = ? AND permission = ?");
-            statement.setString(1, studentId);
-            statement.setString(2, Users.hash(password));
-            statement.setBoolean(3, true);
-
-
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception exc) {
-            System.out.println(exc.getMessage());
-        }
-
-        return false;
+    public boolean loginUser(String studentId, String password) {
+        return this.login(studentId, password, false);
     }
 
+    public boolean loginStaff(String studentId, String password) {
+        return this.login(studentId, password, true);
+    }
 
-    public void addUser(String addstudentID, String addpassword, String addfirstName, String addlastName, String addphoneNumber,
-                        String addemail, boolean addpermission) {
-        try {
+    public int insert(HashMap data) {
+        data.put("password", Users.hash(data.get("password").toString()));
 
-
-            Users users = new Users();
-            HashMap data = new HashMap();
-
-
-            data.put("email", addemail);
-            data.put("first_name", addfirstName);
-            data.put("last_name", addlastName);
-            data.put("student_id", addstudentID);
-            data.put("password", Users.hash(addpassword));
-            data.put("permission", addpermission);
-            data.put("phone_number",addphoneNumber);
-            
-            users.insert(data);
-
-
-        } catch(Exception exc) {
-
-        }
+        return super.insert(data);
     }
 }

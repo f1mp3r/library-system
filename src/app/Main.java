@@ -20,12 +20,16 @@ public class Main extends Application {
         Books books = new Books();
         HashMap bookData = new HashMap();
         HashMap<String, String> bookupdate = new HashMap<>();
-        System.out.println(String.join(",", books.getById(2).values()));
-/*
+        System.out.println(books.getById(1));
+
 
                   //add a book
-//        books.addBook("4656566","Soup", "Kitchen",3,0,"elo");
-
+//        "4656566","Soup", "Kitchen",3,0,"elo"
+//        books.insert(new HashMap() {{
+//            put("title", "Random book");
+//            put("isbn", "46543841385");
+//        }});
+/*
         // region make an admin
 //     users.addUser("random", "random", "Admin", "Admin","666666", "admin@llibrary.com", true);
 

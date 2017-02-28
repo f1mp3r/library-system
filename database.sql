@@ -37,12 +37,6 @@ UNIQUE (email)
 )
 ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-
-
-
-
-
-
 INSERT INTO books (isbn,title,location,copies_in_stock,currently_on_loan,authors) VALUES ("65464456","Book about stuff","C-40-41",2,0,"Potato");					
 
 
