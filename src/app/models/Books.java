@@ -12,7 +12,13 @@ public class Books extends Model {
             super();
             this.table = "books";
 
-
+//            this.columns.add("id");
+//            this.columns.add("isbn");
+//            this.columns.add("title");
+//            this.columns.add("location");
+//            this.columns.add("copies_in_stock");
+//            this.columns.add("currently_on_load");
+//            this.columns.add("authors");
         }
 
 

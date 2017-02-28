@@ -16,6 +16,9 @@ public class Users extends Model {
         super();
         this.table = "users";
         this.hiddenFields.add("password");
+        this.columns.add("email");
+        this.columns.add("first_name");
+        this.columns.add("last_name");
     }
 
     public static String hash(String input) throws NoSuchAlgorithmException {

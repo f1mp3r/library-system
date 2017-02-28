@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.models.Users;
 import app.utils.TableViewControls;
 
 import javafx.event.ActionEvent;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
@@ -68,7 +70,19 @@ public class StaffScreenController implements Initializable {
 
         tabUserList.setOnSelectionChanged(t -> twg.setTable("users", tableUser));
 
-        tableUser.setOnMouseClicked(event -> twg.getRowId(tableUser));
+//        tableUser.setOnMouseClicked(event -> twg.getRowId(tableUser));
+
+        tableUser.setRowFactory(tv -> {
+            TableRow<Users> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+//                    Users rowData = row.getItem();
+                    System.out.println(row.getItem());
+                    twg.getRowId(tableUser);
+                }
+            });
+            return row;
+        });
 
         tabBooksStaff.setOnSelectionChanged(event -> tabBooksStaff.setOnSelectionChanged(t -> twg.setTable("books", tableBooksForStaff)));
 

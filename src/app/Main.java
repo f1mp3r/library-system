@@ -19,14 +19,16 @@ public class Main extends Application {
         Users users = new Users();
         Books books = new Books();
         HashMap bookData = new HashMap();
-        HashMap<String, ObservableList> bookupdate = new HashMap<>();
-
+        HashMap<String, String> bookupdate = new HashMap<>();
+        System.out.println(String.join(",", books.getById(2).values()));
+/*
 
                   //add a book
-        // books.addBook("4656566","Soup", "Kitchen",3,0,"elo");
+//        books.addBook("4656566","Soup", "Kitchen",3,0,"elo");
 
         // region make an admin
-     //users.addUser("random", "random", "Admin", "Admin","666666", "admin@llibrary.com", true);
+//     users.addUser("random", "random", "Admin", "Admin","666666", "admin@llibrary.com", true);
+
 
         // endregion
 
@@ -34,6 +36,7 @@ public class Main extends Application {
         primaryStage.setTitle("The Librarian");
         primaryStage.setScene(new Scene(root, 380, 320));
         primaryStage.show();
+*/
 
     }
 

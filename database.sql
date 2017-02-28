@@ -2,20 +2,19 @@ CREATE DATABASE IF NOT EXISTS library;
 
 USE library;
 
-DROP TABLE IF EXISTS loans;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS books;
 
 CREATE TABLE books(
+id int NOT NULL auto_increment PRIMARY KEY,
 isbn	VARCHAR(13)      NOT NULL,
 title	VARCHAR(60)		NOT NULL,
 location VARCHAR(10)	NOT NULL,
 copies_in_stock		INT		NOT NULL DEFAULT 0,
 currently_on_loan  INT	NOT NULL DEFAULT 0,
 authors VARCHAR(100) NOT NULL,
-PRIMARY KEY (isbn),
-UNIQUE (title),
-INDEX (location)
+UNIQUE (isbn),
+INDEX (title)
 )
 ENGINE=INNODB DEFAULT CHARSET=latin1;
 
@@ -31,22 +30,15 @@ CREATE TABLE users(
   permission tinyint(1) NOT NULL DEFAULT '0',
   debt decimal(10,2) NOT NULL DEFAULT '0.00',
   phone_number varchar(20) DEFAULT NULL,
+  loaned int Not NULL Default 0,
+  
 PRIMARY KEY (id),
 UNIQUE (email)
 )
 ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 
-CREATE TABLE loans(
-id	int NOT NULL AUTO_INCREMENT,
-user_id	int	NOT NULL,
-isbn VARCHAR(13)             NOT NULL,
-borrow_date date			NOT NULL,
-return_date	date			NOT NULL,
-returned_date date NULL,
-PRIMARY KEY (id)
-)
-ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
 
 
 
@@ -55,5 +47,3 @@ INSERT INTO books (isbn,title,location,copies_in_stock,currently_on_loan,authors
 
 
 
-
-INSERT INTO loans (user_id,isbn,borrow_date,return_date,returned_date) VALUES (1,"5532626262","2017-02-26","2017-03-14", null);

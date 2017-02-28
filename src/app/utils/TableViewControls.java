@@ -8,8 +8,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 public class TableViewControls {
 
 
@@ -18,7 +20,6 @@ public class TableViewControls {
 
     public void setTable(String tableName, TableView setTable) {
         data = FXCollections.observableArrayList();
-
 
         try {
 
