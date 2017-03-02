@@ -106,6 +106,7 @@ public class UserAuthenticationController {
 
     @FXML
     void onRegisterSubmit(ActionEvent event) throws IOException {
+
         if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.passwordValidation(reg6.getText())
                 && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText())
                 && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())) {
@@ -113,14 +114,22 @@ public class UserAuthenticationController {
             HashMap newUser = new HashMap();
             newUser.put("student_id", reg1.getText());
             newUser.put("password", reg6.getText());
-            newUser.put("firstName", reg2.getText());
-            newUser.put("lastName", reg3.getText());
+            newUser.put("first_Name", reg2.getText());
+            newUser.put("last_Name", reg3.getText());
             newUser.put("phone_number", reg4.getText());
             newUser.put("email", reg5.getText());
             newUser.put("permission", false);
-            users.insert(newUser);
-            Screen.popup("CONFIRMATION", "Registration Successful");
-            ((Node) (event.getSource())).getScene().getWindow().hide();
+            //check if email is in use
+            int emailExistCheck = users.getByColumn("email", reg5.getText()).size();
+            if(emailExistCheck == 0) {
+                ///email not in use, continue
+                users.insert(newUser);
+                Screen.popup("CONFIRMATION", "Registration Successful");
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+            } else {
+                //a user was found with that email
+                Screen.popup("WARNING", "Email already in Use");
+            }
         } else {
             Screen.popup("ERROR", InputValidation.getErrorList());
             InputValidation.getErrorList().clear();

@@ -25,7 +25,7 @@ public class Model {
         this.columns = new ArrayList<>();
     }
 
-    public int insert(HashMap data) {
+    public int insert(HashMap data)  {
         int rowsChanged = 0;
         try {
             String insertQuery = String.format(
@@ -58,11 +58,10 @@ public class Model {
         int rowsChanged = 0;
         try {
             String updateQuery = String.format(
-                "UPDATE `" + this.table + "` SET %s WHERE id = %d",
-                "%s",
+                "UPDATE `" + this.table + "` SET %s WHERE id = %d", "%s",
                 id
             );
-
+            System.out.println(updateQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(updateQuery);
 
             Set set = data.entrySet();
@@ -71,12 +70,18 @@ public class Model {
 
             while (i.hasNext()) {
                 Map.Entry mapElement = (Map.Entry) i.next();
-                fields += String.format("`%s` = \"%s\"",
+                fields += String.format("`%s` = %s",
                     mapElement.getKey(),
                     mapElement.getValue()
                 );
+
+                if (i.hasNext()) {
+                    fields += ", ";
+                }
+
             }
             updateQuery = String.format(updateQuery, fields);
+            System.out.println(updateQuery);
 
             statement.executeUpdate(updateQuery);
             rowsChanged = statement.getUpdateCount();
@@ -97,7 +102,8 @@ public class Model {
     public HashMap getByColumn(String column, String id) {
         HashMap<String, String> result = new HashMap();
         try {
-            String selectQuery = String.format("SELECT * FROM `" + this.table + "` WHERE `%s` = %d", column, id);
+            String selectQuery = String.format("SELECT * FROM `" + this.table + "` WHERE `%s` = '%s'", column, id);
+            System.out.println( selectQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
@@ -109,7 +115,8 @@ public class Model {
                         continue;
                     }
 
-                    result.put(columnName, resultSet.getObject(i).toString());
+                    result.put(columnName, resultSet.getString(i));
+
                 }
             }
 
@@ -117,9 +124,11 @@ public class Model {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
+        System.out.println();
         return result;
+
     }
+
 
     /**
      * Returns table entry by given ID
@@ -134,6 +143,10 @@ public class Model {
         String query = String.format("SELECT * FROM `%s`", this.table);
         System.out.println(query);
         return null;
+    }
+
+    public String escape(String variable) {
+        return "'" + variable + "'";
     }
 
     public String toString() {

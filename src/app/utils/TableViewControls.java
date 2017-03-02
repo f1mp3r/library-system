@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.table.TableFilter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,11 +67,12 @@ public class TableViewControls {
 
             }
             setTable.setItems(data);
+            TableFilter.forTableView(setTable).apply();
 
-
+                   conn.getInstance().getConnection().close();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error on Building Table");
+            System.out.println("Error While Building Table");
         }
 
 
@@ -110,8 +112,8 @@ public class TableViewControls {
     }
 
 
-    public void getRowId(TableView tableUser) {
-
+    public String getRowValue(TableView tableUser, int rowNumber) {
+           Object row1 = new Object();
 
         if (tableUser.getSelectionModel().getSelectedItem() != null) {
             TableView.TableViewSelectionModel selectionModel = tableUser.getSelectionModel();
@@ -129,14 +131,16 @@ public class TableViewControls {
             Object getbothvalue = tableUser.getSelectionModel().getSelectedItem().toString();
             //gives you first column value..
 
-            Object row1 = getbothvalue.toString().split(",")[0].substring(1);
+            row1 = getbothvalue.toString().split(",")[rowNumber].substring(1);
 
-            System.out.println("value is: " + row1);
+
 
         }
 
-
+        return row1.toString();
     }
+
+
 
 
 }

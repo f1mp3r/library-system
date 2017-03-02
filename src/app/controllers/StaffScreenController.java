@@ -78,7 +78,7 @@ public class StaffScreenController implements Initializable {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
 //                    Users rowData = row.getItem();
                     System.out.println(row.getItem());
-                    twg.getRowId(tableUser);
+                    twg.getRowValue(tableUser, 0);
                 }
             });
             return row;
@@ -86,7 +86,7 @@ public class StaffScreenController implements Initializable {
 
         tabBooksStaff.setOnSelectionChanged(event -> tabBooksStaff.setOnSelectionChanged(t -> twg.setTable("books", tableBooksForStaff)));
 
-        tableBooksForStaff.setOnMouseClicked(event -> twg.getRowId(tableBooksForStaff));
+        tableBooksForStaff.setOnMouseClicked(event -> twg.getRowValue(tableBooksForStaff, 0));
 
 
 

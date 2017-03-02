@@ -1,45 +1,66 @@
 package app.controllers;
 
+import app.models.Books;
+import app.models.Loans;
+import app.models.Users;
 import app.utils.TableViewControls;
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
-
+import javafx.scene.control.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 /**
  * Created by Thez on 2/24/2017.
  */
 public class UserScreenController implements Initializable {
 
+    TableViewControls twg = new TableViewControls();
+    Users users = new Users();
+    Loans loans = new Loans();
+    Books books = new Books();
     @FXML
     private TableView tableBooks;
     @FXML
     private Tab tabBooks;
-    TableViewControls twg = new TableViewControls();
-
+    @FXML
+    private Label idLabel;
+    @FXML
+    private Label loggedInName;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         tabBooks.setOnSelectionChanged(t -> twg.setTable("books", tableBooks));
-
-        tableBooks.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+        idLabel.setText(Integer.toString(users.getLoggedInUserID()));
+        loggedInName.setText(users.getLoggedInUserName());
 
 
-            }
+        tableBooks.setRowFactory(tv -> {
+            TableRow<Books> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    //Borrow selected Book
+                    books.borrowBook(tableBooks);
+                }
+            });
+            return row;
+        });
+
+        tableBooks.setOnMouseClicked(event -> {
+
 
         });
 
 
+    }
 
 
+    @FXML
+    void onLoadPress(ActionEvent event) {
+        twg.setTable("books", tableBooks);
 
     }
 }

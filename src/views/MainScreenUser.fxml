@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="621.0" prefWidth="935.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.UserScreenController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="883.0" prefWidth="1339.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.UserScreenController">
   <tabs>
-    <Tab text="Untitled Tab 1">
+    <Tab text="Profile">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="idLabel" alignment="CENTER" layoutX="1108.0" layoutY="6.0" prefHeight="66.0" prefWidth="231.0" text="Label" />
+                  <Text layoutX="1061.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Account number is:" />
+                  <Label fx:id="loggedInName" layoutX="327.0" layoutY="31.0" text="Label">
+                     <font>
+                        <Font size="46.0" />
+                     </font>
+                  </Label>
+                  <Text layoutX="54.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, ">
+                     <font>
+                        <Font size="45.0" />
+                     </font>
+                  </Text>
+               </children></AnchorPane>
       </content>
     </Tab>
     <Tab fx:id="tabBooks" text="Books">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView fx:id="tableBooks" layoutY="162.0" prefHeight="430.0" prefWidth="935.0">
+                  <TableView fx:id="tableBooks" layoutY="76.0" prefHeight="775.0" prefWidth="1339.0">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C1" />
                       <TableColumn prefWidth="75.0" text="C2" />
                     </columns>
                   </TableView>
+                  <Button layoutX="34.0" layoutY="11.0" mnemonicParsing="false" onAction="#onLoadPress" prefHeight="59.0" prefWidth="181.0" text="Load Books" />
                </children></AnchorPane>
       </content>
     </Tab>

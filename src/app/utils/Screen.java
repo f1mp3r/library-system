@@ -4,10 +4,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 /**
@@ -27,10 +29,11 @@ public class Screen {
         alert.showAndWait();
     }
 
-    public static void popup(String type, String message) {
+    public static Optional<ButtonType> popup(String type, String message) {
         Alert alert = new Alert(Alert.AlertType.valueOf(type));
         alert.setContentText(message);
-        alert.showAndWait();
+        Optional<ButtonType> result = alert.showAndWait();
+       return result;
     }
 
     public void loadView(String viewFile, String title) {
