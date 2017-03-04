@@ -1,6 +1,7 @@
 package app;
 
 import app.models.Books;
+import app.models.Loans;
 import app.models.Users;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.Date;
 import java.util.HashMap;
 
 public class Main extends Application {
@@ -24,16 +26,24 @@ public class Main extends Application {
 //                  add a book
 //        "4656566","Soup", "Kitchen",3,0,"elo"
 //        books.insert(new HashMap() {{
-//            put("title", "test");
-//            put("isbn", "5555");
-//            put("location", "Testo");
-//            put("authors", "Tester");
+//            put("title", "4443143532444");
+//            put("isbn", "5431413523412");
+//            put("location", "Tesrto");
+//            put("authors", "Testerr");
 //            put("copies_in_stock", 100);
 //        }});
 
-
-
-
+//           add a loan record
+//        Loans loans = new Loans();
+//        loans.insert(new HashMap() {
+//            {
+//                put("student_id", "lopas");
+//                put("isbn", "65464456");
+//                put("date_borrowed", "2017-02-01");
+//                put("title", "hahaha");
+//                put("date_due", "2016-04-01");
+//            }
+//        });
 
 
         // region make an admin

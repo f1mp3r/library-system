@@ -1,6 +1,7 @@
 package app.models;
 
 import com.mysql.jdbc.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -17,7 +18,7 @@ public class Loans extends Model {
     public int getOnLoanCount(String columnValue) {
         int rowcount = 0;
         try {
-            String countQuery = String.format("select count(*) from loans where student_id = '%s'", columnValue);
+            String countQuery = String.format("select count(*) from loans where student_id = '%s' AND returned='no'", columnValue);
             System.out.println(countQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(countQuery);
             ResultSet resultSet = statement.executeQuery();
@@ -30,4 +31,6 @@ public class Loans extends Model {
         }
         return rowcount;
     }
+
+
 }

@@ -68,7 +68,7 @@ public class StaffScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
 
-        tabUserList.setOnSelectionChanged(t -> twg.setTable("users", tableUser));
+        tabUserList.setOnSelectionChanged(t -> twg.setTable("users", tableUser,false,null));
 
 //        tableUser.setOnMouseClicked(event -> twg.getRowId(tableUser));
 
@@ -84,7 +84,7 @@ public class StaffScreenController implements Initializable {
             return row;
         });
 
-        tabBooksStaff.setOnSelectionChanged(event -> tabBooksStaff.setOnSelectionChanged(t -> twg.setTable("books", tableBooksForStaff)));
+        tabBooksStaff.setOnSelectionChanged(event -> tabBooksStaff.setOnSelectionChanged(t -> twg.setTable("books", tableBooksForStaff,false,null)));
 
         tableBooksForStaff.setOnMouseClicked(event -> twg.getRowValue(tableBooksForStaff, 0));
 
@@ -97,7 +97,7 @@ public class StaffScreenController implements Initializable {
 
     @FXML
     void generateTable(ActionEvent event) {
-        twg.setTable("users", tableUser);
+        twg.setTable("users", tableUser,false,null);
 
 
     }

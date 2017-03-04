@@ -24,6 +24,8 @@ public class UserScreenController implements Initializable {
     @FXML
     private TableView tableBooks;
     @FXML
+    private TableView userLoansTable;
+    @FXML
     private Tab tabBooks;
     @FXML
     private Label idLabel;
@@ -33,8 +35,8 @@ public class UserScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        tabBooks.setOnSelectionChanged(t -> twg.setTable("books", tableBooks));
-        idLabel.setText(Integer.toString(users.getLoggedInUserID()));
+        tabBooks.setOnSelectionChanged(t -> twg.setTable("books", tableBooks,false, null));
+        idLabel.setText(Integer.toString(users.getLoggedInUserTableID()));
         loggedInName.setText(users.getLoggedInUserName());
 
 
@@ -49,9 +51,16 @@ public class UserScreenController implements Initializable {
             return row;
         });
 
-        tableBooks.setOnMouseClicked(event -> {
+        userLoansTable.setRowFactory(tv -> {
+            TableRow<Books> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    //return selected Book
+                    books.returnBook(userLoansTable);
+                }
 
-
+            });
+            return row;
         });
 
 
@@ -60,7 +69,14 @@ public class UserScreenController implements Initializable {
 
     @FXML
     void onLoadPress(ActionEvent event) {
-        twg.setTable("books", tableBooks);
+       twg.setTable("books", tableBooks,false,null);
 
     }
+
+    @FXML
+    void refreshUserLoanTable(ActionEvent event) {
+        twg.setTable("loans", userLoansTable,true, Users.getLoggedInStudentId());
+
+    }
+
 }

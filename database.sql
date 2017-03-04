@@ -8,10 +8,13 @@ DROP TABLE IF EXISTS loans;
 
 CREATE TABLE loans(
 `id`				INT                     NOT NULL	AUTO_INCREMENT,
-`student_id`				varchar(10)			NOT NULL,
+`title` varchar(60) NOT NULL,
 `isbn`				VARCHAR(13)             NOT NULL,
 `date_borrowed`                   DATE			NOT NULL,
+`date_due`  		DATE NULL,
 `date_returned`                   DATE			NULL,
+`returned` enum('yes','no') null default 'no',
+`student_id`				varchar(10)			NOT NULL,
 PRIMARY KEY (id)
 )
 ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
@@ -48,7 +51,7 @@ UNIQUE (email)
 )
 ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-INSERT INTO books (isbn,title,location,copies_in_stock,currently_on_loan,authors) VALUES ("65464456","Book about stuff","C-40-41",2,0,"Potato");					
+INSERT INTO books (isbn,title,location,copies_in_stock,currently_on_loan,authors) VALUES ("65464456","Book about stuff","C-40-41",90,0,"Potato");					
 
 
 

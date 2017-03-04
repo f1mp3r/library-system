@@ -1,16 +1,11 @@
 package app.models;
 
-import app.utils.TableViewControls;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
@@ -20,6 +15,7 @@ public class Users extends Model {
     private static int id;
     private static String loggedInUserName;
     private static String loggedInStudentId;
+
     public Users() {
         super();
         this.table = "users";
@@ -39,6 +35,18 @@ public class Users extends Model {
         }
 
         return newHash;
+    }
+
+    public static int getLoggedInUserTableID() {
+        return id;
+    }
+
+    public static String getLoggedInUserName() {
+        return loggedInUserName;
+    }
+
+    public static String getLoggedInStudentId() {
+        return loggedInStudentId;
     }
 
     public boolean login(String studentId, String password, boolean staffOnly) {
@@ -66,9 +74,6 @@ public class Users extends Model {
 
         return false;
     }
-    public static int getLoggedInUserID(){ return id; }
-    public static String getLoggedInUserName() {return loggedInUserName;}
-    public static String getLoggedInStudentId() {return loggedInStudentId;}
 
     public boolean loginUser(String studentId, String password) {
         return this.login(studentId, password, false);
@@ -83,7 +88,6 @@ public class Users extends Model {
 
         return super.insert(data);
     }
-
 
 
 }

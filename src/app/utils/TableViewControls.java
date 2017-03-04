@@ -19,22 +19,28 @@ public class TableViewControls {
     ConnectionManager conn;
     private ObservableList<ObservableList> data;
 
-    public void setTable(String tableName, TableView setTable) {
+    public void setTable(String tableName, TableView setTable, boolean isThisUserSpecificLoanTable, String studentID) {
         data = FXCollections.observableArrayList();
-
+        String SQL;
+        if (isThisUserSpecificLoanTable == true) {
+            SQL = ("SELECT * from loans where student_id=" + "'" + studentID + "'" + " AND returned='no'");
+            System.out.println(SQL + " Set table");
+        } else {
+            SQL = ("SELECT * from" + " " + tableName);
+        }
         try {
 
-            String SQL = ("SELECT * from" + " " + tableName);
+
             PreparedStatement prepstm;
             prepstm = conn.getInstance().getConnection().prepareStatement(SQL);
-
+            System.out.println(SQL);
             ResultSet rs = prepstm.executeQuery();
             setTable.getColumns().clear();
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
 
                 final int j = i;
                 TableColumn<ObservableList<String>, String> col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
-                col.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(j).toString()));
+                col.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(j)));
 
 
                 setTable.getColumns().addAll(col);
@@ -69,7 +75,7 @@ public class TableViewControls {
             setTable.setItems(data);
             TableFilter.forTableView(setTable).apply();
 
-                   conn.getInstance().getConnection().close();
+            conn.getInstance().getConnection().close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error While Building Table");
@@ -113,7 +119,7 @@ public class TableViewControls {
 
 
     public String getRowValue(TableView tableUser, int rowNumber) {
-           Object row1 = new Object();
+        Object row1 = new Object();
 
         if (tableUser.getSelectionModel().getSelectedItem() != null) {
             TableView.TableViewSelectionModel selectionModel = tableUser.getSelectionModel();
@@ -134,13 +140,10 @@ public class TableViewControls {
             row1 = getbothvalue.toString().split(",")[rowNumber].substring(1);
 
 
-
         }
 
         return row1.toString();
     }
-
-
 
 
 }

@@ -25,7 +25,7 @@ public class Model {
         this.columns = new ArrayList<>();
     }
 
-    public int insert(HashMap data)  {
+    public int insert(HashMap data) {
         int rowsChanged = 0;
         try {
             String insertQuery = String.format(
@@ -58,8 +58,8 @@ public class Model {
         int rowsChanged = 0;
         try {
             String updateQuery = String.format(
-                "UPDATE `" + this.table + "` SET %s WHERE id = %d", "%s",
-                id
+                    "UPDATE `" + this.table + "` SET %s WHERE id = %d", "%s",
+                    id
             );
             System.out.println(updateQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(updateQuery);
@@ -71,8 +71,8 @@ public class Model {
             while (i.hasNext()) {
                 Map.Entry mapElement = (Map.Entry) i.next();
                 fields += String.format("`%s` = %s",
-                    mapElement.getKey(),
-                    mapElement.getValue()
+                        mapElement.getKey(),
+                        mapElement.getValue()
                 );
 
                 if (i.hasNext()) {
@@ -95,6 +95,7 @@ public class Model {
 
     /**
      * Returns table entry if such exists matching the column and value
+     *
      * @param column
      * @param id
      * @return
@@ -103,7 +104,7 @@ public class Model {
         HashMap<String, String> result = new HashMap();
         try {
             String selectQuery = String.format("SELECT * FROM `" + this.table + "` WHERE `%s` = '%s'", column, id);
-            System.out.println( selectQuery);
+            System.out.println(selectQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
@@ -132,6 +133,7 @@ public class Model {
 
     /**
      * Returns table entry by given ID
+     *
      * @param id
      * @return
      */
