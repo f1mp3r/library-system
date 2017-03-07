@@ -8,20 +8,31 @@ import java.util.Iterator;
  * Created by Chris on 6.3.2017 г..
  */
 public class QueryBuilder {
-    protected String table;
-    protected ArrayList fields;
-    protected ArrayList values;
-    protected ArrayList whereClause;
-    protected QueryType queryType;
+    private String table;
+    private ArrayList<String> fields;
+    private ArrayList<String> values;
+    private ArrayList<String> whereClause;
+    private ArrayList<String> joins;
+    private ArrayList<String> orders;
+    private QueryType queryType;
 
     public QueryBuilder (String table) {
         this.table = table;
         this.fields = new ArrayList();
         this.whereClause = new ArrayList();
+        this.joins = new ArrayList();
+        this.orders = new ArrayList();
     }
 
-    public QueryBuilder select(ArrayList fields) {
-        this.fields.addAll(fields);
+    public QueryBuilder select(String... fields) {
+        for (String field : fields) {
+            this.fields.add(this.escapeField(field));
+        }
+
+        if (fields.length == 0) {
+            this.fields.add("*");
+        }
+
         this.queryType = QueryType.SELECT;
 
         return this;
@@ -42,7 +53,7 @@ public class QueryBuilder {
     }
 
     public QueryBuilder where(String field, String compare, String value, String table) {
-        this.whereClause.add(String.format("`%s`.`%s` %s %s", table, field, compare, value));
+        this.whereClause.add(String.format("`%s`.`%s` %s %s", table, field, compare, this.escapeValue(value)));
         return this;
     }
 
@@ -50,12 +61,56 @@ public class QueryBuilder {
         return this.where(field, compare, value, this.table);
     }
 
+    public QueryBuilder where(String field, String value) {
+        return this.where(field, "=", value);
+    }
+
+    public QueryBuilder orWhere(String field, String compare, String value, String table) throws Exception {
+        if (this.whereClause.isEmpty()) {
+            throw new Exception("orWhere() should be used after a where()");
+        }
+
+        int lastWhereClauseId = this.whereClause.size() - 1;
+        this.where(field, compare, value, table);
+        int newWhereClauseId = lastWhereClauseId + 1;
+
+        String lastWhere = this.whereClause.get(lastWhereClauseId);
+        String newTempWhere = this.whereClause.get(newWhereClauseId);
+        String newWhere = String.format("(%s OR %s)", lastWhere, newTempWhere);
+
+        // remove the 2 where clauses
+        this.whereClause.remove(newWhereClauseId);
+        this.whereClause.remove(lastWhereClauseId);
+        this.whereClause.add(lastWhereClauseId, newWhere);
+
+        return this;
+    }
+
+    public QueryBuilder orWhere(String field, String compare, String value) throws Exception {
+        return this.orWhere(field, compare, value, this.table);
+    }
+
+    public QueryBuilder orWhere(String field, String value) throws Exception {
+        return this.orWhere(field, "=", value, this.table);
+    }
+
+    public QueryBuilder addColumn(String columnName) {
+        this.fields.add(this.escapeField(columnName));
+        return this;
+    }
+
     public String build() {
         String query = "";
 
         switch (this.queryType) {
             case SELECT:
-                // todo
+                query = String.format(
+                        "SELECT %s FROM %s %s %s",
+                        String.join(", ", this.fields),
+                        this.buildTableAndJoins(),
+                        this.buildWhereString(),
+                        this.orders.size() > 0 ? String.join(", ", this.orders) : ""
+                );
                 break;
             case UPDATE:
                 // todo: add joins
@@ -112,8 +167,16 @@ public class QueryBuilder {
     }
 
     private String buildTableAndJoins() {
-        String selector = this.table;
+        String selector = this.escapeField(this.table);
         // todo: add joins
         return selector;
+    }
+
+    public static String escapeField(String field) {
+        return "`" + field + "`";
+    }
+
+    public static String escapeValue(String value) {
+        return '"' + value + '"';
     }
 }

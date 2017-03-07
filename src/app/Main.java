@@ -3,6 +3,7 @@ package app;
 import app.models.Books;
 import app.models.Loans;
 import app.models.Users;
+import app.utils.QueryBuilder;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,9 +20,16 @@ public class Main extends Application {
 
         Users users = new Users();
         Books books = new Books();
-        HashMap bookData = new HashMap();
-        HashMap<String, String> bookupdate = new HashMap<>();
-
+//        HashMap bookData = new HashMap();
+        HashMap<String, String> bookUpdate = new HashMap<>();
+        /*
+        QueryBuilder query = new QueryBuilder("books");
+        String searchKey = "%book%";
+        System.out.println(
+            query.select("title", "authors").where("title", "LIKE", searchKey).orWhere("authors", "LIKE", searchKey).build()
+        );
+//        query.update(bookUpdate).where("id", "4").build();
+*/
 
 //                  add a book
 //        "4656566","Soup", "Kitchen",3,0,"elo"
@@ -58,12 +66,12 @@ public class Main extends Application {
 //        }});
 
         // endregion
-
+/*
         Parent root = FXMLLoader.load(getClass().getResource("../views/ChooseScreen.fxml"));
         primaryStage.setTitle("The Librarian");
         primaryStage.setScene(new Scene(root, 380, 320));
         primaryStage.show();
-
+*/
 
     }
 
