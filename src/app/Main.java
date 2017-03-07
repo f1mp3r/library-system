@@ -22,23 +22,28 @@ public class Main extends Application {
         Books books = new Books();
 //        HashMap bookData = new HashMap();
         HashMap<String, String> bookUpdate = new HashMap<>();
-        /*
-        QueryBuilder query = new QueryBuilder("books");
-        String searchKey = "%book%";
-        System.out.println(
-            query.select("title", "authors").where("title", "LIKE", searchKey).orWhere("authors", "LIKE", searchKey).build()
-        );
+
+        QueryBuilder query = new QueryBuilder("loans");
+//        System.out.println( query.select("*").where("student_id", "=", Users.getLoggedInStudentId()).where("returned", "=", "no").build());
+//        String searchKey = "%book%";
+//        System.out.println(
+//            query.select("title", "authors").where("title", "LIKE", searchKey).orWhere("authors", "LIKE", searchKey).build()
+//        );
 //        query.update(bookUpdate).where("id", "4").build();
-*/
+//
+
+
+
+
 
 //                  add a book
-//        "4656566","Soup", "Kitchen",3,0,"elo"
+//        "4656566","Soup", "Kitchen",3,0,"elo".
 //        books.insert(new HashMap() {{
-//            put("title", "4443143532444");
-//            put("isbn", "5431413523412");
-//            put("location", "Tesrto");
-//            put("authors", "Testerr");
-//            put("copies_in_stock", 100);
+//            put("title", "fer4");
+//            put("isbn", "999");
+//            put("location", "Tesrsto");
+//            put("authors", "Testesrr");
+//            put("copies_in_stock", 1);
 //        }});
 
 //           add a loan record
@@ -66,12 +71,12 @@ public class Main extends Application {
 //        }});
 
         // endregion
-/*
+
         Parent root = FXMLLoader.load(getClass().getResource("../views/ChooseScreen.fxml"));
         primaryStage.setTitle("The Librarian");
         primaryStage.setScene(new Scene(root, 380, 320));
         primaryStage.show();
-*/
+
 
     }
 

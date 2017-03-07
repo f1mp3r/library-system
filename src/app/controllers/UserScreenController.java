@@ -3,6 +3,7 @@ package app.controllers;
 import app.models.Books;
 import app.models.Loans;
 import app.models.Users;
+import app.utils.QueryBuilder;
 import app.utils.TableViewControls;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,11 +32,18 @@ public class UserScreenController implements Initializable {
     private Label idLabel;
     @FXML
     private Label loggedInName;
+    @FXML
+    private TextField searchfield;
+
+    QueryBuilder queryBooks = new QueryBuilder("books");
+    QueryBuilder queryUsers = new QueryBuilder("users");
+    QueryBuilder queryLoans = new QueryBuilder("loans");
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        tabBooks.setOnSelectionChanged(t -> twg.setTable("books", tableBooks,false, null));
+        tabBooks.setOnSelectionChanged(t -> twg.setTable( queryBooks.select().build(), tableBooks));
         idLabel.setText(Integer.toString(users.getLoggedInUserTableID()));
         loggedInName.setText(users.getLoggedInUserName());
 
@@ -69,14 +77,27 @@ public class UserScreenController implements Initializable {
 
     @FXML
     void onLoadPress(ActionEvent event) {
-       twg.setTable("books", tableBooks,false,null);
+        twg.setTable(queryBooks.select().build(), tableBooks);
 
+        System.out.println(queryBooks.select().build());
     }
 
     @FXML
     void refreshUserLoanTable(ActionEvent event) {
-        twg.setTable("loans", userLoansTable,true, Users.getLoggedInStudentId());
 
+        twg.setTable(queryLoans.select().where("student_id", users.getLoggedInStudentId()).where("returned", "no").build(), userLoansTable);
     }
+
+    @FXML
+    void searchbutton(ActionEvent event) {
+        String searchKey = "%"+searchfield.getText()+"%";
+        try{
+        twg.setTable(queryBooks.select().where("title", "LIKE", searchKey).orWhere("authors", "LIKE", searchKey).build(), tableBooks);
+
+        System.out.println(queryBooks.select().build());
+    }catch (java.lang.Exception e) {
+            System.out.println(e.getMessage());
+        }
+        }
 
 }

@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.models.Users;
+import app.utils.QueryBuilder;
 import app.utils.TableViewControls;
 
 import javafx.event.ActionEvent;
@@ -64,11 +65,15 @@ public class StaffScreenController implements Initializable {
     @FXML
     private Tab tabBooksStaff;
 
+    QueryBuilder queryBooks = new QueryBuilder("books");
+    QueryBuilder queryUsers = new QueryBuilder("users");
+    QueryBuilder queryLoans = new QueryBuilder("loans");
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
 
-        tabUserList.setOnSelectionChanged(t -> twg.setTable("users", tableUser,false,null));
+        tabUserList.setOnSelectionChanged(t -> twg.setTable(queryUsers.select().build(), tableUser));
 
 //        tableUser.setOnMouseClicked(event -> twg.getRowId(tableUser));
 
@@ -84,7 +89,7 @@ public class StaffScreenController implements Initializable {
             return row;
         });
 
-        tabBooksStaff.setOnSelectionChanged(event -> tabBooksStaff.setOnSelectionChanged(t -> twg.setTable("books", tableBooksForStaff,false,null)));
+        tabBooksStaff.setOnSelectionChanged(event -> tabBooksStaff.setOnSelectionChanged(t -> twg.setTable(queryBooks.select().build(), tableBooksForStaff)));
 
         tableBooksForStaff.setOnMouseClicked(event -> twg.getRowValue(tableBooksForStaff, 0));
 
@@ -97,7 +102,7 @@ public class StaffScreenController implements Initializable {
 
     @FXML
     void generateTable(ActionEvent event) {
-        twg.setTable("users", tableUser,false,null);
+        twg.setTable(queryUsers.select().build(), tableUser);
 
 
     }

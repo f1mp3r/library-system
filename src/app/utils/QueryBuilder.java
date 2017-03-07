@@ -126,6 +126,10 @@ public class QueryBuilder {
                 break;
         }
 
+        this.fields.clear();
+        this.whereClause.clear();
+        this.joins.clear();
+        this.orders.clear();
         return query;
     }
 

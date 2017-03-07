@@ -15,6 +15,7 @@ public class Users extends Model {
     private static int id;
     private static String loggedInUserName;
     private static String loggedInStudentId;
+    private static String loggedInStudentEmail;
 
     public Users() {
         super();
@@ -37,6 +38,7 @@ public class Users extends Model {
         return newHash;
     }
 
+    public static String getLoggedInStudentEmail() {return getLoggedInStudentId();}
     public static int getLoggedInUserTableID() {
         return id;
     }
@@ -64,6 +66,7 @@ public class Users extends Model {
                 id = (Integer.parseInt(resultSet.getString("id")));
                 loggedInUserName = resultSet.getString("first_name");
                 loggedInStudentId = resultSet.getString("student_id");
+                loggedInStudentEmail = resultSet.getString("email");
                 return true;
             } else {
                 return false;

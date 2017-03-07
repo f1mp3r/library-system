@@ -19,15 +19,10 @@ public class TableViewControls {
     ConnectionManager conn;
     private ObservableList<ObservableList> data;
 
-    public void setTable(String tableName, TableView setTable, boolean isThisUserSpecificLoanTable, String studentID) {
+    public void setTable(String SQL, TableView setTable) {
         data = FXCollections.observableArrayList();
-        String SQL;
-        if (isThisUserSpecificLoanTable == true) {
-            SQL = ("SELECT * from loans where student_id=" + "'" + studentID + "'" + " AND returned='no'");
-            System.out.println(SQL + " Set table");
-        } else {
-            SQL = ("SELECT * from" + " " + tableName);
-        }
+
+
         try {
 
 
