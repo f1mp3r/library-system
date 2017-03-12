@@ -36,7 +36,7 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="label" alignment="CENTER" text="Welcome" />
+            <Label fx:id="infoBox" alignment="CENTER" text="Welcome" />
          </children>
       </HBox>
    </bottom>
@@ -44,8 +44,8 @@
       <Pane prefHeight="268.0" prefWidth="221.0" BorderPane.alignment="CENTER">
          <children>
             <TextField fx:id="staffusertext" alignment="CENTER" layoutX="26.0" layoutY="117.0" promptText="Username" />
-            <PasswordField fx:id="staffpasswordtext" alignment="CENTER" layoutX="26.0" layoutY="153.0" promptText="Password" />
-            <Button fx:id="login" layoutX="64.0" layoutY="193.0" mnemonicParsing="false" onAction="#onStaffLoginButtonClick" prefHeight="25.0" prefWidth="73.0" text="Login" />
+            <PasswordField fx:id="staffPasswordField" alignment="CENTER" layoutX="26.0" layoutY="153.0" promptText="Password" />
+            <Button fx:id="loginButton" layoutX="64.0" layoutY="193.0" mnemonicParsing="false" onAction="#onStaffLoginButtonClick" prefHeight="25.0" prefWidth="73.0" text="Login" />
             <ImageView fitHeight="50.0" fitWidth="173.0" layoutX="14.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
             <Text layoutX="33.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Staff Login" wrappingWidth="155.13671875">
                <font>

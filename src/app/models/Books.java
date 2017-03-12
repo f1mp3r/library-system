@@ -18,16 +18,24 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * Created by Thez on 2/25/2017.
  */
 public class Books extends Model {
+    public static String[] memberVisibleFields = new String[] {
+            "@books.id as `#`",
+            "@isbn as `ISBN`",
+            "@title as `Title`",
+            "@authors as `Authors`",
+            "@location as `Location in library`",
+            "@copies_in_stock `Copies available`"
+    };
 
     public Books() {
         super();
         this.table = "books";
     }
 
-
     public void borrowBook(TableView tableBooks) {
         Books books = new Books();
-        HashMap<String, String> bookupdate = new HashMap<>();
+        HashMap<String, String> bookUpdate = new HashMap<>();
+
         Loans loans = new Loans();
         TableViewControls twg = new TableViewControls();
         QueryBuilder queryBooks = new QueryBuilder("books");
@@ -37,25 +45,17 @@ public class Books extends Model {
         int bookId = Integer.parseInt(twg.getRowValue(tableBooks, 0));
         HashMap bookInfo = books.getById(bookId);
 
-
         int copiesAvailable = Integer.parseInt(bookInfo.get("copies_in_stock").toString());
-        int loaned = loans.getOnLoanCount(Users.getLoggedInStudentId());
+        int loaned = loans.getOnLoanCount(String.valueOf(Users.getLoggedInUserTableID()));
         String bookTitle = bookInfo.get("title").toString();
-        String isbn = bookInfo.get("isbn").toString();
 
-
-        String email = Users.getLoggedInStudentEmail();
-
-        boolean checkForSameBook =loans.checkForSameBook(Users.getLoggedInStudentId(),isbn);
+        boolean checkForSameBook = loans.checkForSameBook(String.valueOf(Users.getLoggedInUserTableID()), String.valueOf(bookId));
 
         java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
         LocalDate due = date.toLocalDate().plusDays(8);
 
-
-
-
         //If borrow limit is not exceeded and if book is in stock
-        if ((loaned <= 10) && copiesAvailable >= 1  && (checkForSameBook==true)) {
+        if ((loaned <= 10) && copiesAvailable >= 1 && checkForSameBook) {
             //Display a popup box asking to confirm choice
             Optional<ButtonType> result = Screen.popup("CONFIRMATION", "You are about to borrow:" + "\n" + bookTitle + "\n" + "Is this correct?");
             if (result.get() == ButtonType.OK) {
@@ -63,38 +63,28 @@ public class Books extends Model {
                 // create a loan record for the logged in user and update book info
                 loans.insert(new HashMap() {
                     {
-                        put("student_id", Users.getLoggedInStudentId());
-                        put("isbn", isbn);
+                        put("user_id", Users.getLoggedInUserTableID());
+                        put("book_id", bookId);
                         put("date_borrowed", date);
-                        put("title", bookTitle);
                         put("date_due", due);
                     }
                 });
 
-                bookupdate.put("copies_in_stock", "copies_in_stock -1");
-                bookupdate.put("currently_on_loan", "currently_on_loan +1");
-                books.update(bookupdate, bookId);
-                twg.setTable(queryBooks.select().build(), tableBooks);
+                bookUpdate.put("copies_in_stock", "copies_in_stock -1");
+                bookUpdate.put("currently_on_loan", "currently_on_loan +1");
+                books.update(bookUpdate, bookId);
+                twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
                 //end of loan creation
-            } else {
-                // ... user chose CANCEL or close
             }
-
-            //Display messages that you have reached maximum borrow limit or if there is no books available
         } else if (loaned >= 10 & copiesAvailable >= 1) {
+            //Display messages that you have reached maximum borrow limit or if there is no books available
             Screen.popup("INFORMATION", "You are already borrowing the maximum amount of books allowed.");
-            System.out.println("potato");
-        } else if ((isbn.equals(isbn) && checkForSameBook==false)) {
+        } else if (!checkForSameBook) {
             Screen.popup("INFORMATION", "You are already borrowing a copy of this book");
-
         } else {
-
             Screen.popup("INFORMATION", "There are no books available");
-
         }
-
     }
-
 
     public void returnBook(TableView userLoansTable) {
         Users users = new Users();
@@ -103,48 +93,38 @@ public class Books extends Model {
         TableViewControls twg = new TableViewControls();
         QueryBuilder queryLoans = new QueryBuilder("loans");
 
-        int loanId = Integer.parseInt(twg.getRowValue(userLoansTable, 0));
-        HashMap loanInfo = loans.getById(loanId);
+        int bookId = Integer.parseInt(twg.getRowValue(userLoansTable, 0));
+        HashMap loanInfo = loans.getByUserAndBook(String.valueOf(Users.getLoggedInUserTableID()), String.valueOf(bookId));
+        HashMap book = books.getById(bookId);
 
-        String bookTitle = loanInfo.get("title").toString();
-        String isbn = loanInfo.get("isbn").toString();
-        int getBookId = Integer.parseInt(books.getByColumn("isbn", isbn).get("id").toString());
+        String bookTitle = book.get("title").toString();
+        int getBookId = Integer.parseInt(books.getById(bookId).get("id").toString());
 
         HashMap updateLoans = new HashMap<>();
-        HashMap<String, String> bookupdate = new HashMap<>();
+        HashMap<String, String> bookUpdate = new HashMap<>();
         HashMap<String, String> userAddDebt = new HashMap<>();
-
-
-
 
         Date date = new Date(Calendar.getInstance().getTime().getTime());
 
         Optional<ButtonType> result = Screen.popup("CONFIRMATION", "You are about to return:" + "\n" + bookTitle + "\n" + "Do you wish to proceed?");
 
         if (result.get() == ButtonType.OK) {
-
-            // ... user chose OK
             // set the loan record to returned and update book stock
-
-
             updateLoans.put("returned", "'1'");
             updateLoans.put("date_returned", "'" + date.toLocalDate() + "'");
-            loans.update(updateLoans, loanId);
+            loans.update(updateLoans, Integer.parseInt(loanInfo.get("id").toString()));
 
-            bookupdate.put("copies_in_stock", "copies_in_stock +1");
-            bookupdate.put("currently_on_loan", "currently_on_loan -1");
-            books.update(bookupdate, getBookId);
+            bookUpdate.put("copies_in_stock", "copies_in_stock +1");
+            bookUpdate.put("currently_on_loan", "currently_on_loan -1");
+            books.update(bookUpdate, getBookId);
 
             //check if book was overdue, if so add debt to the user.
-            //refresh table
-
-            twg.setTable(queryLoans.select().build(), userLoansTable);
-            HashMap dates = loans.getByColumn("id", Integer.toString(loanId));
+            HashMap dates = loans.getByColumn("id", Integer.toString(bookId));
             LocalDate borrowDate = LocalDate.parse(dates.get("date_borrowed").toString());
             LocalDate returnedDate = LocalDate.parse(dates.get("date_returned").toString());
             long daysPassed = DAYS.between(borrowDate, returnedDate);
-            if (daysPassed > 8) {
 
+            if (daysPassed > 8) {
                 userAddDebt.put("debt", "8.00");
                 users.update(userAddDebt, users.getLoggedInUserTableID());
 
@@ -152,15 +132,11 @@ public class Books extends Model {
                         "You can pay and get it removed at the Library Desk");
 
                 //refresh table
-                twg.setTable(queryLoans.select().where("student_id", users.getLoggedInStudentId()).where("returned", "no").build(), userLoansTable);
-
             } else {
-                twg.setTable(queryLoans.select().where("student_id", users.getLoggedInStudentId()).where("returned", "no").build(), userLoansTable);
                 Screen.popup("INFORMATION", "Thanks! Please place the book on the trolley");
             }
-
-        } else {
-            // ... user chose CANCEL or close
         }
+
+        twg.setTable(users.getLoanedBooksQuery(), userLoansTable);
     }
 }

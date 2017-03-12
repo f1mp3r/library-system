@@ -36,23 +36,23 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="label" alignment="CENTER" text="Welcome" />
+            <Label fx:id="infoBox" alignment="CENTER" text="Welcome" />
          </children>
       </HBox>
    </bottom>
    <left>
       <Pane prefHeight="268.0" prefWidth="221.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="usertext" alignment="CENTER" layoutX="26.0" layoutY="117.0" promptText="StudentID" />
-            <Button fx:id="login" layoutX="26.0" layoutY="193.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="25.0" prefWidth="73.0" text="Login" />
-            <ImageView fitHeight="109.0" fitWidth="172.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" />
+            <TextField fx:id="studentIdField" alignment="CENTER" layoutX="26.0" layoutY="117.0" promptText="StudentID" />
+            <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="26.0" layoutY="153.0" promptText="Password" />
+            <Button fx:id="loginButton" layoutX="26.0" layoutY="193.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="25.0" prefWidth="73.0" text="Login" />
             <Button layoutX="111.0" layoutY="193.0" mnemonicParsing="false" onAction="#onRegisterButtonClick" prefHeight="25.0" prefWidth="73.0" text="Register" />
+            <ImageView fitHeight="109.0" fitWidth="172.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" />
             <Text layoutX="33.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Sign in to your account." wrappingWidth="155.13671875">
                <font>
                   <Font name="System Italic" size="19.0" />
                </font>
             </Text>
-            <PasswordField fx:id="passwordtext" alignment="CENTER" layoutX="26.0" layoutY="153.0" promptText="Password" />
          </children>
          <BorderPane.margin>
             <Insets left="5.0" />

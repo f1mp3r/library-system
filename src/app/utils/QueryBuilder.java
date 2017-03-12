@@ -24,9 +24,15 @@ public class QueryBuilder {
         this.orders = new ArrayList();
     }
 
+    public QueryBuilder setTable(String table) {
+        this.table = table;
+        return this;
+    }
+
     public QueryBuilder select(String... fields) {
         for (String field : fields) {
-            this.fields.add(this.escapeField(field));
+            // if starts with @ means expression so don't quote
+            this.fields.add(field.startsWith("@") ? field.substring(1) : this.quoteField(field));
         }
 
         if (fields.length == 0) {
@@ -95,8 +101,43 @@ public class QueryBuilder {
     }
 
     public QueryBuilder addColumn(String columnName) {
-        this.fields.add(this.escapeField(columnName));
+        this.fields.add(this.quoteField(columnName));
         return this;
+    }
+
+    public QueryBuilder join(JoinType joinType, String joinTable, String relation, String... fields) {
+        String joinQuery = "";
+        switch (joinType) {
+            case INNER:
+                joinQuery += "INNER JOIN ";
+                break;
+            case LEFT:
+                joinQuery += "LEFT JOIN ";
+                break;
+            case RIGHT:
+                joinQuery += "RIGHT JOIN";
+                break;
+        }
+
+        joinQuery += String.format("%s ON %s", joinTable, relation);
+        this.joins.add(joinQuery);
+        for (String field : fields) {
+            this.fields.add(field);
+        }
+
+        return this;
+    }
+
+    public QueryBuilder joinLeft(String joinTable, String relation, String... fields) {
+        return this.join(JoinType.LEFT, joinTable, relation, fields);
+    }
+
+    public QueryBuilder joinInner(String joinTable, String relation, String... fields) {
+        return this.join(JoinType.INNER,  joinTable, relation, fields);
+    }
+
+    public QueryBuilder joinRight(String joinTable, String relation, String... fields) {
+        return this.join(JoinType.RIGHT,  joinTable, relation, fields);
     }
 
     public String build() {
@@ -171,12 +212,12 @@ public class QueryBuilder {
     }
 
     private String buildTableAndJoins() {
-        String selector = this.escapeField(this.table);
-        // todo: add joins
+        String selector = this.quoteField(this.table);
+        selector += this.joins.isEmpty() ? "" : " " + String.join(" ", this.joins);
         return selector;
     }
 
-    public static String escapeField(String field) {
+    public static String quoteField(String field) {
         return "`" + field + "`";
     }
 

@@ -55,3 +55,8 @@ INSERT INTO books (isbn,title,location,copies_in_stock,currently_on_loan,authors
 
 
 
+# CHANGES
+ALTER TABLE `loans` CHANGE `returned` `returned` BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE `loans` DROP `title`, DROP `isbn`;
+ALTER TABLE `loans` ADD `book_id` INT NOT NULL AFTER `id`;
+ALTER TABLE `loans` CHANGE `student_id` `user_id` int NOT NULL;

@@ -4,12 +4,20 @@ package app.utils;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by Thez on 2/23/2017.
  */
 public class InputValidation {
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public static boolean isValidEmail(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
+
     public static ArrayList<String> errorList = new ArrayList<>();
 
     public static ArrayList<String> getErrorList() {
@@ -17,20 +25,21 @@ public class InputValidation {
     }
 
     public static boolean isValidEmailAddress(String email) {
-        boolean result = true;
         try {
-            InternetAddress emailAddr = new InternetAddress(email);
-            emailAddr.validate();
+            InternetAddress emailAddress = new InternetAddress(email);
+            emailAddress.validate();
+
+            return true;
         } catch (AddressException ex) {
-            result = false;
             errorList.add("Invalid email");
+
+            return false;
         }
-        return result;
     }
 
-    public static boolean passwordValidation(String password) {
-        Pattern UpperCasePatten = Pattern.compile("[A-Z ]");
-        Pattern digitCasePatten = Pattern.compile("[0-9 ]");
+    public static boolean isValidPassword(String password) {
+        Pattern UpperCasePatten = Pattern.compile("[A-Z]");
+        Pattern digitCasePatten = Pattern.compile("[0-9]");
 
         boolean result = true;
 
@@ -50,8 +59,6 @@ public class InputValidation {
         }
 
         return result;
-
-
     }
 
     public static boolean lengthCheck(String wordToCheck) {

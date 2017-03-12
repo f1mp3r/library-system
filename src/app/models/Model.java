@@ -1,6 +1,7 @@
 package app.models;
 
 import app.utils.ConnectionManager;
+import app.utils.QueryBuilder;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
@@ -117,7 +118,6 @@ public class Model {
                     }
 
                     result.put(columnName, resultSet.getString(i));
-
                 }
             }
 
@@ -125,9 +125,8 @@ public class Model {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println();
-        return result;
 
+        return result;
     }
 
     /**
@@ -146,7 +145,7 @@ public class Model {
         return null;
     }
 
-    public String escape(String variable) {
+    public String quote(String variable) {
         return "'" + variable + "'";
     }
 

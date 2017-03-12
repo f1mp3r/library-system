@@ -33,6 +33,7 @@ public class Screen {
         Alert alert = new Alert(Alert.AlertType.valueOf(type));
         alert.setContentText(message);
         Optional<ButtonType> result = alert.showAndWait();
+
        return result;
     }
 

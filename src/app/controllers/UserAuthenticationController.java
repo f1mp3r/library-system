@@ -5,12 +5,17 @@ import app.models.Users;
 import app.utils.InputValidation;
 import app.utils.Screen;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 /**
  * Created by Chris on 21.2.2017 г..
@@ -18,27 +23,17 @@ import java.util.HashMap;
 public class UserAuthenticationController {
 
     @FXML
-    private Button login;
+    private Button loginButtonx;
     @FXML
-    private TextField usertext, staffusertext;
+    private TextField studentIdField, staffusertext;
     @FXML
-    private PasswordField passwordtext, staffpasswordtext;
+    private PasswordField passwordField, staffPasswordField;
     @FXML
-    private Label label;
+    private Label infoBox;
 
+    // todo: add descriptive names
     @FXML
-    private TextField reg2;
-    @FXML
-    private TextField reg3;
-    @FXML
-    private TextField reg4;
-    @FXML
-    private TextField reg5;
-    @FXML
-    private TextField reg6;
-    @FXML
-    private TextField reg1;
-
+    private TextField reg2, reg3, reg4, reg5, reg6, reg1;
 
     private String username;
     private String password;
@@ -46,49 +41,44 @@ public class UserAuthenticationController {
     Users users;
     Screen screen;
 
-
     public UserAuthenticationController() {
         screen = new Screen(this.getClass());
         users = new Users();
+        /*
+        passwordField.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER)  {
+                this.login(keyEvent, false);
+            }
+        });
+        */
+    }
+
+    private void login(Event event, boolean admin) {
+        this.username = admin ? staffusertext.getText().toString() : studentIdField.getText().toString();
+        this.password = admin ? staffPasswordField.getText().toString() : passwordField.getText().toString();
+        boolean login = admin ? this.users.loginStaff(this.username, this.password) : this.users.loginUser(this.username, this.password);
+
+        if (login) {
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+
+            try {
+                this.loadLibraryHomeScreenView();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            this.infoBox.setText("Invalid Login");
+        }
     }
 
     @FXML
     public void onLoginButtonClick(ActionEvent event) throws IOException {
-        username = usertext.getText().toString();
-        password = passwordtext.getText().toString();
-
-        if (users.loginUser(username, password)) {
-            label.setText("Logged In");
-            // todo: remove when not needed
-            System.out.println("yay");
-            ((Node) (event.getSource())).getScene().getWindow().hide();
-
-            this.loadLibraryHomeScreenView();
-        } else {
-            label.setText("Invalid Login");
-            // todo: remove when not needed
-            System.out.println("nay");
-        }
+        this.login(event, false);
     }
 
     @FXML
     public void onStaffLoginButtonClick(ActionEvent event) throws IOException {
-        username = staffusertext.getText().toString();
-        password = staffpasswordtext.getText().toString();
-        if (users.loginStaff(username, password)) {
-            label.setText("Logged In");
-            // todo: remove when not needed
-            System.out.println("yay");
-            ((Node) (event.getSource())).getScene().getWindow().hide();
-
-            this.loadLibraryHomeScreenViewForStaff();
-        } else {
-            label.setText("Invalid Login");
-            // todo: remove when not needed
-            System.out.println("nay");
-        }
-
-
+        this.login(event, true);
     }
 
     public void loadLibraryHomeScreenView() throws IOException {
@@ -106,10 +96,9 @@ public class UserAuthenticationController {
 
     @FXML
     void onRegisterSubmit(ActionEvent event) throws IOException {
-
-        if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.passwordValidation(reg6.getText())
-                && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText())
-                && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())) {
+        if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.isValidPassword(reg6.getText())
+                && !reg1.getText().isEmpty() && !reg2.getText().isEmpty()
+                && !reg3.getText().isEmpty() && !reg4.getText().isEmpty()) {
 
             HashMap newUser = new HashMap();
             newUser.put("student_id", reg1.getText());
@@ -119,8 +108,10 @@ public class UserAuthenticationController {
             newUser.put("phone_number", reg4.getText());
             newUser.put("email", reg5.getText());
             newUser.put("permission", false);
+
             //check if email is in use
             int emailExistCheck = users.getByColumn("email", reg5.getText()).size();
+
             if(emailExistCheck == 0) {
                 ///email not in use, continue
                 users.insert(newUser);
@@ -128,7 +119,7 @@ public class UserAuthenticationController {
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             } else {
                 //a user was found with that email
-                Screen.popup("WARNING", "Email already in Use");
+                Screen.popup("WARNING", "Email already in use");
             }
         } else {
             Screen.popup("ERROR", InputValidation.getErrorList());
@@ -146,8 +137,5 @@ public class UserAuthenticationController {
     void onStaffLogin(ActionEvent event) throws IOException {
         ((Node) (event.getSource())).getScene().getWindow().hide();
         this.screen.loadView("StaffLogin", "StaffLogin");
-
     }
-
-
 }

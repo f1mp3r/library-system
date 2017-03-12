@@ -1,5 +1,7 @@
 package app.models;
 
+import app.utils.QueryBuilder;
+
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +18,7 @@ public class Users extends Model {
     private static String loggedInUserName;
     private static String loggedInStudentId;
     private static String loggedInStudentEmail;
+    protected QueryBuilder queryBuilder = new QueryBuilder("users");
 
     public Users() {
         super();
@@ -38,7 +41,10 @@ public class Users extends Model {
         return newHash;
     }
 
-    public static String getLoggedInStudentEmail() {return getLoggedInStudentId();}
+    public static String getLoggedInStudentEmail() {
+        return getLoggedInStudentId();
+    }
+
     public static int getLoggedInUserTableID() {
         return id;
     }
@@ -86,11 +92,19 @@ public class Users extends Model {
         return this.login(studentId, password, true);
     }
 
+    public String getLoanedBooksQuery() {
+        return this.queryBuilder
+                .select(Books.memberVisibleFields)
+                .joinInner("loans", "users.id = loans.user_id")
+                .joinInner("books", "books.id = loans.book_id")
+                .where("id", "=", String.valueOf(Users.getLoggedInUserTableID()), "users")
+                .where("returned", "=", "0", "loans")
+                .build();
+    }
+
     public int insert(HashMap data) {
         data.put("password", Users.hash(data.get("password").toString()));
 
         return super.insert(data);
     }
-
-
 }

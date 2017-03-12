@@ -1,8 +1,5 @@
 package app;
 
-import app.models.Books;
-import app.models.Loans;
-import app.models.Users;
 import app.utils.QueryBuilder;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,20 +7,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.sql.Date;
-import java.util.HashMap;
-
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        Users users = new Users();
-        Books books = new Books();
+//        Users users = new Users();
+//        Books books = new Books();
 //        HashMap bookData = new HashMap();
-        HashMap<String, String> bookUpdate = new HashMap<>();
+//        HashMap<String, String> bookUpdate = new HashMap<>();
 
-        QueryBuilder query = new QueryBuilder("loans");
+//        QueryBuilder query = new QueryBuilder("loans");
 //        System.out.println( query.select("*").where("student_id", "=", Users.getLoggedInStudentId()).where("returned", "=", "no").build());
 //        String searchKey = "%book%";
 //        System.out.println(
@@ -31,11 +24,6 @@ public class Main extends Application {
 //        );
 //        query.update(bookUpdate).where("id", "4").build();
 //
-
-
-
-
-
 //                  add a book
 //        "4656566","Soup", "Kitchen",3,0,"elo".
 //        books.insert(new HashMap() {{
@@ -72,11 +60,14 @@ public class Main extends Application {
 
         // endregion
 
-        Parent root = FXMLLoader.load(getClass().getResource("../views/ChooseScreen.fxml"));
-        primaryStage.setTitle("The Librarian");
-        primaryStage.setScene(new Scene(root, 380, 320));
-        primaryStage.show();
-
+//        try {
+            Parent root = FXMLLoader.load(getClass().getResource("../views/ChooseScreen.fxml"));
+            primaryStage.setTitle("The Librarian");
+            primaryStage.setScene(new Scene(root, 380, 320));
+            primaryStage.show();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
 
     }
 

@@ -75,7 +75,7 @@ public class StaffScreenController implements Initializable {
 
         tabUserList.setOnSelectionChanged(t -> twg.setTable(queryUsers.select().build(), tableUser));
 
-//        tableUser.setOnMouseClicked(event -> twg.getRowId(tableUser));
+//        tableUser.setOnMouseClicked(event -> tableViewControls.getRowId(tableUser));
 
         tableUser.setRowFactory(tv -> {
             TableRow<Users> row = new TableRow<>();
