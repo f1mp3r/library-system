@@ -76,6 +76,10 @@ public class UserScreenController implements Initializable {
             }
         });
 
+        searchField.setOnKeyReleased(keyEvent -> {
+            this.refreshTable(false);
+        });
+
         // load the table initially
         this.refreshTable(false);
         this.refreshLoanedBooks();
