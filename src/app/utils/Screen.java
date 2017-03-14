@@ -25,7 +25,7 @@ public class Screen {
     public static void popup(String type, ArrayList<String> message) {
         System.out.println(message);
         Alert alert = new Alert(Alert.AlertType.valueOf(type));
-        alert.setContentText(message.toString().substring(1).replaceFirst("]", "").replace(", ", ""));
+        alert.setContentText(String.join("\r\n", message));
         alert.showAndWait();
     }
 

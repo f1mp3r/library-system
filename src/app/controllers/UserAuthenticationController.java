@@ -97,8 +97,8 @@ public class UserAuthenticationController {
     @FXML
     void onRegisterSubmit(ActionEvent event) throws IOException {
         if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.isValidPassword(reg6.getText())
-                && !reg1.getText().isEmpty() && !reg2.getText().isEmpty()
-                && !reg3.getText().isEmpty() && !reg4.getText().isEmpty()) {
+                && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText())
+                && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())) {
 
             HashMap newUser = new HashMap();
             newUser.put("student_id", reg1.getText());
