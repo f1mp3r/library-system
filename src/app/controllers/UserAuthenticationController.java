@@ -62,7 +62,11 @@ public class UserAuthenticationController {
             ((Node) (event.getSource())).getScene().getWindow().hide();
 
             try {
-                this.loadLibraryHomeScreenView();
+                if (admin) {
+                    this.loadLibraryHomeScreenViewForStaff();
+                } else {
+                    this.loadLibraryHomeScreenView();
+                }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -138,4 +142,6 @@ public class UserAuthenticationController {
         ((Node) (event.getSource())).getScene().getWindow().hide();
         this.screen.loadView("StaffLogin", "StaffLogin");
     }
+
+
 }

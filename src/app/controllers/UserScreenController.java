@@ -71,22 +71,27 @@ public class UserScreenController implements Initializable {
         });
 
         searchField.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  {
-                this.refreshTable(false);
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                this.books.refreshTable(tableViewControls, tableBooks, searchField, false);
             }
         });
 
         searchField.setOnKeyReleased(keyEvent -> {
-            this.refreshTable(false);
+            this.books.refreshTable(tableViewControls, tableBooks, searchField, false);
         });
 
         // load the table initially
-        this.refreshTable(false);
+        this.books.refreshTable(tableViewControls, tableBooks, searchField, false);
         this.refreshLoanedBooks();
     }
 
     @FXML
-    void onLoadPress(ActionEvent event) {
+    void searchButton(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onLoadPressUsers(ActionEvent event) {
         tableViewControls.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
     }
 
@@ -100,22 +105,7 @@ public class UserScreenController implements Initializable {
     }
 
     @FXML
-    void searchButton(ActionEvent event) {
-        this.refreshTable(false);
-    }
-
-    private void refreshTable(boolean forceEmpty) {
-        String searchKey = "%" + searchField.getText() + "%";
-
-        try {
-            QueryBuilder query = queryBooks.select(Books.memberVisibleFields);
-            if (!searchField.getText().isEmpty() && !forceEmpty) {
-                query.where("title", "LIKE", searchKey).orWhere("authors", "LIKE", searchKey);
-            }
-
-            tableViewControls.setTable(query.build(), tableBooks);
-        } catch (java.lang.Exception e) {
-            System.out.println(e.getMessage());
-        }
+    void searchButtonUsers(ActionEvent event) {
+        this.books.refreshTable(tableViewControls, tableBooks, searchField, false);
     }
 }

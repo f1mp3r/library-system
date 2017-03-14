@@ -25,7 +25,7 @@ public class Main extends Application {
 //        query.update(bookUpdate).where("id", "4").build();
 //
 //                  add a book
-//        "4656566","Soup", "Kitchen",3,0,"elo".
+
 //        books.insert(new HashMap() {{
 //            put("title", "fer4");
 //            put("isbn", "999");

@@ -14,6 +14,17 @@ import java.util.HashMap;
  * Created by Chris on 21.2.2017 г..
  */
 public class Users extends Model {
+
+    public static String[] memberVisibleFields = new String[] {
+            "@id as `#`",
+            "@email as `E-Mail`",
+            "@first_name as `First Name`",
+            "@last_name as `Last Name`",
+            "@student_id as `Student ID`",
+            "@phone_number as `Phone Number`",
+            "@debt as `Fine`"
+    };
+
     private static int id;
     private static String loggedInUserName;
     private static String loggedInStudentId;

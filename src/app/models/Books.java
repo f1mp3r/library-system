@@ -5,6 +5,7 @@ import app.utils.Screen;
 import app.utils.TableViewControls;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -138,5 +139,30 @@ public class Books extends Model {
         }
 
         twg.setTable(users.getLoanedBooksQuery(), userLoansTable);
+    }
+
+    public void refreshTable(TableViewControls table, TableView tableView, TextField searchField, boolean forceEmpty) {
+        String searchKey = "%" + searchField.getText() + "%";
+        QueryBuilder queryBooks = new QueryBuilder("books");
+
+        try {
+            QueryBuilder query = queryBooks.select(Books.memberVisibleFields);
+            if (!searchField.getText().isEmpty() && !forceEmpty) {
+                query.where("title", "LIKE", searchKey).orWhere("authors", "LIKE", searchKey);
+            }
+
+            table.setTable(query.build(), tableView);
+        } catch (java.lang.Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void addBook() {
+
+
+
+    }
+
+    public void editBook(TableView tableBooks) {
     }
 }
