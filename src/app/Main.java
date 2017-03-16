@@ -1,5 +1,7 @@
 package app;
 
+import app.models.Books;
+import app.models.Users;
 import app.utils.QueryBuilder;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,14 +9,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        Users users = new Users();
-//        Books books = new Books();
-//        HashMap bookData = new HashMap();
-//        HashMap<String, String> bookUpdate = new HashMap<>();
+        Users users = new Users();
+        Books books = new Books();
+        HashMap bookData = new HashMap();
+        HashMap<String, String> bookUpdate = new HashMap<>();
 
 //        QueryBuilder query = new QueryBuilder("loans");
 //        System.out.println( query.select("*").where("student_id", "=", Users.getLoggedInStudentId()).where("returned", "=", "no").build());

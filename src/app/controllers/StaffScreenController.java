@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class StaffScreenController implements Initializable {
@@ -113,15 +114,38 @@ public class StaffScreenController implements Initializable {
     @FXML
     void addBook(ActionEvent event) {
 
-        screen.loadView("editBook", "addBook");
+        screen.loadView("AddBook", "addBook");
 
         books.addBook();
 
     }
 
+    @FXML
+    private TextField bookTitle;
 
+    @FXML
+    private TextField bookAuthor;
 
+    @FXML
+    private TextField bookIsbn;
 
+    @FXML
+    private TextField bookLocation;
+
+    @FXML
+    private TextField bookCopies;
+
+//    @FXML
+//    void confirmBookButton(ActionEvent event) {
+
+//        HashMap newBook = new HashMap();
+//        newBook.put("title", bookTitle.getText());
+//        newBook.put("authors", bookAuthor.getText());
+//        newBook.put("isbn", bookIsbn.getText());
+//        newBook.put("location", bookLocation.getText());
+//        newBook.put("copies_in_stock", bookCopies.getText());
+
+//    }
 
     private void refreshTable(boolean forceEmpty) {
         String searchKey = "%" + searchFieldUsers.getText() + "%";
