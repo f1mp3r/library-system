@@ -52,15 +52,15 @@ public class Main extends Application {
 
 
         // region make an admin
-//       users.insert(new HashMap() {{
-//            put("student_id", "random");
-//            put("password", "random");
-//            put("first_name", "Tololo");
-//            put("last_name", "sero");
-//            put("email", "soup@kitchen.com");
-//            put("phone_number", "2112141");
-//            put("permission", true);
-//        }});
+       users.insert(new HashMap() {{
+            put("student_id", "random");
+            put("password", "random");
+            put("first_name", "Tololo");
+            put("last_name", "sero");
+            put("email", "soup@kitchen.com");
+            put("phone_number", "2112141");
+            put("permission", true);
+        }});
 
         // endregion
 
