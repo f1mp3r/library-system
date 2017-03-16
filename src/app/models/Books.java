@@ -3,11 +3,17 @@ package app.models;
 import app.utils.QueryBuilder;
 import app.utils.Screen;
 import app.utils.TableViewControls;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import com.mysql.jdbc.PreparedStatement;
+import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -19,7 +25,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * Created by Thez on 2/25/2017.
  */
 public class Books extends Model {
-    public static String[] memberVisibleFields = new String[] {
+    public static String[] memberVisibleFields = new String[]{
             "@books.id as `#`",
             "@isbn as `ISBN`",
             "@title as `Title`",
@@ -158,12 +164,119 @@ public class Books extends Model {
     }
 
 
-    public void addBook() {
+    public void addBook(TableView tableBooks) {
 
+        final boolean[] notANumber = {false};
 
+        Dialog dialog = new Dialog<>();
+        dialog.setTitle("Login Dialog");
+        dialog.setHeaderText("Look, a Custom Login Dialog");
+// Set the button types.
+        ButtonType addButtontype = new ButtonType("Add Book", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(addButtontype, ButtonType.CANCEL);
+
+// Create the username and password labels and fields.
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField title = new TextField();
+        title.setPromptText("Book Title");
+
+        TextField author = new TextField();
+        author.setPromptText("Book Author");
+
+        TextField isbn = new TextField();
+        isbn.setPromptText("ISBN");
+
+        TextField location = new TextField();
+        location.setPromptText("Location");
+
+        TextField copies = new TextField();
+        copies.setPromptText("Copies");
+
+        grid.add(new Label("Title:"), 0, 0);
+        grid.add(title, 1, 0);
+
+        grid.add(new Label("Author:"), 0, 1);
+        grid.add(author, 1, 1);
+
+        grid.add(new Label("ISBN:"), 0, 2);
+        grid.add(isbn, 1, 2);
+
+        grid.add(new Label("Location:"), 0, 3);
+        grid.add(location, 1, 3);
+
+        grid.add(new Label("Copies:"), 0, 4);
+        grid.add(copies, 1, 4);
+
+//        Activate add button when all fields have text
+        Node addButton = dialog.getDialogPane().lookupButton(addButtontype);
+        BooleanBinding booleanBind = title.textProperty().isEmpty()
+                .or(author.textProperty().isEmpty())
+                .or(isbn.textProperty().isEmpty())
+                .or(location.textProperty().isEmpty())
+                .or(copies.textProperty().isEmpty());
+
+        addButton.disableProperty().bind(booleanBind);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.show();
+        //focus on title when dialog opens
+        Platform.runLater(() -> title.requestFocus());
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == addButtontype) {
+                System.out.println(title.getText());
+                Books books = new Books();
+                HashMap newBook = new HashMap();
+                newBook.put("title", title.getText());
+                newBook.put("authors", author.getText());
+                newBook.put("isbn", isbn.getText());
+                newBook.put("location", location.getText());
+                try {
+                newBook.put("copies_in_stock", Integer.parseInt(copies.getText()));
+                } catch (NumberFormatException e) {
+                       notANumber[0] = true;
+
+                }
+                // insert book if duplicate isbn does not exist else display a warning
+                if (isbnCheck(isbn.getText()) == 0 && notANumber[0] == false) {
+
+                        books.insert(newBook);
+                        QueryBuilder queryBooks = new QueryBuilder("books");
+                        TableViewControls twg = new TableViewControls();
+                        twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
+
+                }else if(notANumber[0] == true){
+                    Screen.popup("WARNING", "The copies field should contain a number");
+
+                }
+                else {
+                    Screen.popup("WARNING", "A Book with the same isbn already exists");
+                }
+
+            }
+            return null;
+        });
 
     }
 
-    public void editBook(TableView tableBooks) {
+    // if isbnCheck returns more than 0, a book already exists in the table
+    public int isbnCheck(String isbn) {
+        int rowCount = 0;
+
+        try {
+            String countQuery = String.format("select count(*) from books where isbn = '%s'", isbn);
+            PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(countQuery);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            rowCount = resultSet.getInt("count(*)");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return rowCount;
     }
 }
