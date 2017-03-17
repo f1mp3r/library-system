@@ -165,8 +165,8 @@ public class Books extends Model {
     public void addBook(TableView tableBooks, TableViewControls twg) throws NumberFormatException {
 
         Dialog dialog = new Dialog<>();
-        dialog.setTitle("Login Dialog");
-        dialog.setHeaderText("Look, a Custom Login Dialog");
+        dialog.setTitle("New Book");
+        dialog.setHeaderText("New Book entry");
 // Sets the button types.
         ButtonType addButtontype = new ButtonType("Add Book", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(addButtontype, ButtonType.CANCEL);
