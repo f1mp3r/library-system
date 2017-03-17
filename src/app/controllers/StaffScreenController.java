@@ -5,23 +5,16 @@ import app.models.Users;
 import app.utils.QueryBuilder;
 import app.utils.Screen;
 import app.utils.TableViewControls;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
-import javafx.util.Pair;
 
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class StaffScreenController implements Initializable {
@@ -30,7 +23,6 @@ public class StaffScreenController implements Initializable {
     QueryBuilder queryUsers = new QueryBuilder("users");
     TableViewControls twg = new TableViewControls();
     Books books = new Books();
-
 
 
     @FXML
@@ -45,7 +37,7 @@ public class StaffScreenController implements Initializable {
     @FXML
     private TableView<?> tableUsers;
     @FXML
-    private TableView  tableBooks;
+    private TableView tableBooks;
 
     @FXML
     private TextField searchFieldUsers;
@@ -57,7 +49,7 @@ public class StaffScreenController implements Initializable {
         this.screen = new Screen(this.getClass());
 
         searchFieldUsers.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 this.refreshTable(false);
             }
         });
@@ -70,7 +62,7 @@ public class StaffScreenController implements Initializable {
 
 
         searchFieldBooks.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 books.refreshTable(twg, tableBooks, searchFieldBooks, false);
             }
         });
@@ -89,6 +81,7 @@ public class StaffScreenController implements Initializable {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     //edit selected Book
+
 
                 }
             });
@@ -109,7 +102,6 @@ public class StaffScreenController implements Initializable {
     }
 
 
-
     @FXML
     void clearButtonBooks(ActionEvent event) {
 
@@ -122,7 +114,7 @@ public class StaffScreenController implements Initializable {
 
     @FXML
     void addBook(ActionEvent event) {
-        books.addBook(tableBooks);
+        books.addBook(tableBooks, twg);
 
 
     }

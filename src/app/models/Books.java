@@ -3,17 +3,15 @@ package app.models;
 import app.utils.QueryBuilder;
 import app.utils.Screen;
 import app.utils.TableViewControls;
-import com.mysql.jdbc.PreparedStatement;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -164,18 +162,16 @@ public class Books extends Model {
     }
 
 
-    public void addBook(TableView tableBooks) {
-
-        final boolean[] notANumber = {false};
+    public void addBook(TableView tableBooks, TableViewControls twg) throws NumberFormatException {
 
         Dialog dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Look, a Custom Login Dialog");
-// Set the button types.
+// Sets the button types.
         ButtonType addButtontype = new ButtonType("Add Book", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(addButtontype, ButtonType.CANCEL);
 
-// Create the username and password labels and fields.
+//create TextFields
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -223,60 +219,41 @@ public class Books extends Model {
 
         dialog.getDialogPane().setContent(grid);
         dialog.show();
+
+
         //focus on title when dialog opens
         Platform.runLater(() -> title.requestFocus());
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == addButtontype) {
-                System.out.println(title.getText());
-                Books books = new Books();
-                HashMap newBook = new HashMap();
-                newBook.put("title", title.getText());
-                newBook.put("authors", author.getText());
-                newBook.put("isbn", isbn.getText());
-                newBook.put("location", location.getText());
-                try {
-                newBook.put("copies_in_stock", Integer.parseInt(copies.getText()));
-                } catch (NumberFormatException e) {
-                       notANumber[0] = true;
 
-                }
-                // insert book if duplicate isbn does not exist else display a warning
-                if (isbnCheck(isbn.getText()) == 0 && notANumber[0] == false) {
+        addButton.addEventFilter(ActionEvent.ACTION, event -> {
+            HashMap isbnCheck = this.getByColumn("isbn", isbn.getText());
+            try {
 
-                        books.insert(newBook);
-                        QueryBuilder queryBooks = new QueryBuilder("books");
-                        TableViewControls twg = new TableViewControls();
-                        twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
+                if (isbnCheck.get("isbn") == null) {
+                    System.out.println(title.getText());
+                    HashMap newBook = new HashMap();
+                    newBook.put("title", title.getText());
+                    newBook.put("authors", author.getText());
+                    newBook.put("isbn", isbn.getText());
+                    newBook.put("location", location.getText());
+                    newBook.put("copies_in_stock", Integer.parseInt(copies.getText()));
+                    this.insert(newBook);
 
-                }else if(notANumber[0] == true){
-                    Screen.popup("WARNING", "The copies field should contain a number");
+                    QueryBuilder queryBooks = new QueryBuilder("books");
+                    twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
 
-                }
-                else {
-                    Screen.popup("WARNING", "A Book with the same isbn already exists");
+                } else {
+                    Screen.popup("WARNING", "A Book with the same isbn already exists, please edit the existing entry instead.");
                 }
 
+            } catch (NumberFormatException e) {
+                Screen.popup("WARNING", "The copies field should contain a number");
+                event.consume();
             }
-            return null;
+
         });
 
     }
 
-    // if isbnCheck returns more than 0, a book already exists in the table
-    public int isbnCheck(String isbn) {
-        int rowCount = 0;
 
-        try {
-            String countQuery = String.format("select count(*) from books where isbn = '%s'", isbn);
-            PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(countQuery);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            rowCount = resultSet.getInt("count(*)");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return rowCount;
-    }
 }
