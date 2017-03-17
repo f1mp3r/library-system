@@ -90,6 +90,7 @@ public class StaffScreenController implements Initializable {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     //edit selected Book
 
+
                 }
             });
 
