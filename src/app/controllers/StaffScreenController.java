@@ -19,6 +19,7 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class StaffScreenController implements Initializable {
@@ -36,9 +37,6 @@ public class StaffScreenController implements Initializable {
     private TextField searchFieldBooks;
 
     @FXML
-    private Tab tabUsers;
-
-    @FXML
     private TableView<?> tableUsers;
     @FXML
     private TableView tableBooks;
@@ -51,6 +49,15 @@ public class StaffScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.screen = new Screen(this.getClass());
+        this.refreshTable(false);
+        books.refreshTable(twg, tableBooks, searchFieldBooks, false);
+        tabBooks.setOnSelectionChanged(t ->         books.refreshTable(twg, tableBooks, searchFieldBooks, false));
+        ContextMenu menu = new ContextMenu();
+        MenuItem removeMenuItem = new MenuItem("Remove Fine");
+        MenuItem editUserContactInfo = new MenuItem("Write Potato");
+        menu.getItems().addAll(removeMenuItem, editUserContactInfo);
+        tableUsers.setContextMenu(menu);
+
 
         searchFieldUsers.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
@@ -75,9 +82,6 @@ public class StaffScreenController implements Initializable {
             books.refreshTable(twg, tableBooks, searchFieldBooks, false);
         });
 
-        this.refreshTable(false);
-        books.refreshTable(twg, tableBooks, searchFieldBooks, false);
-
 
         tableBooks.setRowFactory(tv -> {
             TableRow<Books> row = new TableRow<>();
@@ -87,7 +91,7 @@ public class StaffScreenController implements Initializable {
                     //edit selected Book
 
                     int bookId = Integer.parseInt(twg.getRowValue(tableBooks, 0));
-                    HashMap bookData= this.books.getById(bookId);
+                    HashMap bookData = this.books.getById(bookId);
                     Dialog dialog = Screen.dialogEditBook("Edit book", "Edit: \"" + bookData.get("title").toString() + "\"");
                     this.setupEditFields(dialog, bookData);
                 }
@@ -96,28 +100,32 @@ public class StaffScreenController implements Initializable {
             return row;
         });
 
+        //right click on user on staff user list. Option Remove Fine;
+        removeMenuItem.setOnAction(event -> {
+            Optional<ButtonType> result = Screen.popup("CONFIRMATION","Are you sure you want to remove debt for User "+Users.getLoggedInUserName());
+
+            if (result.get() == ButtonType.OK){
+                // ... user chose OK
+                HashMap fine = new HashMap();
+                Users users = new Users();
+                fine.put("debt", "0");
+               int row = Integer.parseInt(twg.getRowValue(tableUsers,0));
+                users.update(fine, row);
+                this.refreshTable(false);
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+
+        });
+
+        //right click on user on staff user list. Option Write Potato
+        editUserContactInfo.setOnAction(event -> {
+            System.out.println("Potato");
+
+        });
     }
 
-    @FXML
-    void onLoadPressUsers(ActionEvent event) {
 
-    }
-
-    @FXML
-    void searchButtonUsers(ActionEvent event) {
-
-    }
-
-
-    @FXML
-    void clearButtonBooks(ActionEvent event) {
-
-    }
-
-    @FXML
-    void searchButtonBooks(ActionEvent event) {
-
-    }
 
     @FXML
     void addBook(ActionEvent event) {
@@ -246,5 +254,26 @@ public class StaffScreenController implements Initializable {
         });
 
         Platform.runLater(() -> title.requestFocus());
+    }
+
+    @FXML
+    void onLoadPressUsers(ActionEvent event) {
+
+    }
+
+    @FXML
+    void searchButtonUsers(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void clearButtonBooks(ActionEvent event) {
+
+    }
+
+    @FXML
+    void searchButtonBooks(ActionEvent event) {
+
     }
 }

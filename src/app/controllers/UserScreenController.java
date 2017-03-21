@@ -4,6 +4,7 @@ import app.models.Books;
 import app.models.Loans;
 import app.models.Users;
 import app.utils.QueryBuilder;
+import app.utils.Screen;
 import app.utils.TableViewControls;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -24,6 +27,7 @@ public class UserScreenController implements Initializable {
     Users users = new Users();
     Loans loans = new Loans();
     Books books = new Books();
+    QueryBuilder queryBooks = new QueryBuilder("books");
     @FXML
     private TableView tableBooks, userLoansTable;
     @FXML
@@ -32,13 +36,48 @@ public class UserScreenController implements Initializable {
     private Label idLabel, loggedInName;
     @FXML
     private TextField searchField;
-
-    QueryBuilder queryBooks = new QueryBuilder("books"),
-            queryUsers = new QueryBuilder("users"),
-            queryLoans = new QueryBuilder("loans");
+    @FXML
+    private MenuItem changePhone;
+    @FXML
+    private MenuItem changeEmail;
+    @FXML
+    private Tab profileTab;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        changeEmail.setOnAction((ActionEvent a) -> {
+
+            Optional<String> result = Screen.makeSingleInputDialog(changeEmail, "Enter New Email here", "Email Change", "Email Change", "Please enter your new Email");
+            result.ifPresent(input -> {
+
+                HashMap updateData = new HashMap();
+                int checkForEmail = users.getByColumn("email",input).size();
+                if(checkForEmail==0) {
+                    updateData.put("email", ("'" + input + "'"));
+                    users.update(updateData, Users.getLoggedInUserTableID());
+                }else{
+                    Screen.popup("WARNING", "Sorry, this email is  already in use");
+                }
+            });
+
+
+        });
+
+        changePhone.setOnAction((ActionEvent a) -> {
+
+            Optional<String> result = Screen.makeSingleInputDialog(changePhone, "Enter New Phone number here", "Phone Number Change", "Phone Number Change", "Please enter your new Phone Number");
+            result.ifPresent(input -> {
+                HashMap updateData = new HashMap();
+                updateData.put("phone_number", ("'" + input + "'"));
+                users.update(updateData, Users.getLoggedInUserTableID());
+
+            });
+
+
+        });
+
+        tableViewControls.setTable(this.users.getLoanedBooksQuery(), userLoansTable);
+        profileTab.setOnSelectionChanged(t -> tableViewControls.setTable(this.users.getLoanedBooksQuery(), userLoansTable));
         tabBooks.setOnSelectionChanged(t -> tableViewControls.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks));
         idLabel.setText(Integer.toString(users.getLoggedInUserTableID()));
         loggedInName.setText(users.getLoggedInUserName());

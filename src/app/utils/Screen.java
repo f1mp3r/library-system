@@ -1,14 +1,13 @@
 package app.utils;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import javax.print.DocFlavor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -63,4 +62,16 @@ public class Screen {
         return dialog;
     }
 
+    public static  Optional<String> makeSingleInputDialog(MenuItem objectOfChange, String textfieldPrompt, String title, String headertext, String contentText) {
+
+
+            TextInputDialog dialog = new TextInputDialog(textfieldPrompt);
+            dialog.setTitle(title);
+            dialog.setHeaderText(headertext);
+            dialog.setContentText(contentText);
+            Optional<String> newInput = dialog.showAndWait();
+//            newInput.ifPresent(input -> input = forReturn);
+
+        return newInput;
+    }
 }

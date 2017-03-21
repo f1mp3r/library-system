@@ -7,21 +7,23 @@ import app.utils.Screen;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
-import java.net.URL;
+import java.sql.SQLDataException;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
 /**
  * Created by Chris on 21.2.2017 г..
  */
 public class UserAuthenticationController {
 
+    Users users;
+    Screen screen;
     @FXML
     private Button loginButtonx;
     @FXML
@@ -30,16 +32,11 @@ public class UserAuthenticationController {
     private PasswordField passwordField, staffPasswordField;
     @FXML
     private Label infoBox;
-
     // todo: add descriptive names
     @FXML
     private TextField reg2, reg3, reg4, reg5, reg6, reg1;
-
     private String username;
     private String password;
-
-    Users users;
-    Screen screen;
 
     public UserAuthenticationController() {
         screen = new Screen(this.getClass());
@@ -99,7 +96,7 @@ public class UserAuthenticationController {
     }
 
     @FXML
-    void onRegisterSubmit(ActionEvent event) throws IOException {
+    void onRegisterSubmit(ActionEvent event) throws SQLDataException {
         if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.isValidPassword(reg6.getText())
                 && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText())
                 && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())) {
@@ -115,20 +112,29 @@ public class UserAuthenticationController {
 
             //check if email is in use
             int emailExistCheck = users.getByColumn("email", reg5.getText()).size();
+            HashMap checkStudentID = users.getByColumn("student_id", reg1.getText());
 
-            if(emailExistCheck == 0) {
+            if (emailExistCheck == 0 & (!checkStudentID.containsKey("student_id"))) {
                 ///email not in use, continue
                 users.insert(newUser);
                 Screen.popup("CONFIRMATION", "Registration Successful");
                 ((Node) (event.getSource())).getScene().getWindow().hide();
+            } else if (checkStudentID.containsKey("student_id")) {
+
+                Screen.popup("WARNING", "Student-ID already in use");
+
             } else {
+
                 //a user was found with that email
                 Screen.popup("WARNING", "Email already in use");
+
             }
         } else {
             Screen.popup("ERROR", InputValidation.getErrorList());
             InputValidation.getErrorList().clear();
         }
+
+
     }
 
     @FXML

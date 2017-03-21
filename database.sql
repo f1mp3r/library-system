@@ -47,7 +47,8 @@ CREATE TABLE users(
   `loaned` int Not NULL Default 0,
   
 PRIMARY KEY (id),
-UNIQUE (email)
+UNIQUE (email),
+UNIQUE (student_id)
 )
 ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
