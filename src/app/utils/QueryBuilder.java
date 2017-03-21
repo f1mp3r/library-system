@@ -7,6 +7,7 @@ import java.util.Iterator;
 /**
  * Created by Chris on 6.3.2017 г..
  */
+
 public class QueryBuilder {
     private String table;
     private ArrayList<String> fields;

@@ -4,7 +4,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -50,4 +52,15 @@ public class Screen {
             System.out.println(e.getMessage());
         }
     }
+
+    // method dialog, return dialog
+    public static Dialog dialogEditBook(String title, String headerText) {
+
+        Dialog dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setHeaderText(headerText);
+
+        return dialog;
+    }
+
 }

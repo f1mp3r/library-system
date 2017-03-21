@@ -65,9 +65,9 @@ public class Main extends Application {
         // endregion
 
 //        try {
-            Parent root = FXMLLoader.load(getClass().getResource("../views/MainScreenStaff.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("../views/ChooseScreen.fxml"));
             primaryStage.setTitle("The Librarian");
-            primaryStage.setScene(new Scene(root, 900, 900));
+            primaryStage.setScene(new Scene(root, 380, 320));
             primaryStage.show();
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage());
