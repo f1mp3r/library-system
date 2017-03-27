@@ -99,7 +99,9 @@ public class UserAuthenticationController {
     void onRegisterSubmit(ActionEvent event) throws SQLDataException {
         if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.isValidPassword(reg6.getText())
                 && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText())
-                && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())) {
+                && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())
+                && InputValidation.validNameCheck(reg2.getText()) && InputValidation.validNameCheck(reg3.getText())
+                && InputValidation.lengthCheckForStudentId(reg1.getText())) {
 
             HashMap newUser = new HashMap();
             newUser.put("student_id", reg1.getText());

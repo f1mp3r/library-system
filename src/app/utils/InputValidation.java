@@ -11,12 +11,7 @@ import java.util.regex.Pattern;
  * Created by Thez on 2/23/2017.
  */
 public class InputValidation {
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    public static boolean isValidEmail(String emailStr) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-        return matcher.find();
-    }
 
     public static ArrayList<String> errorList = new ArrayList<>();
 
@@ -70,5 +65,28 @@ public class InputValidation {
         }
 
         return result;
+    }
+
+    public static boolean lengthCheckForStudentId(String wordToCheck) {
+        boolean result = true;
+
+        if (wordToCheck.length() > 10) {
+            errorList.add("Student Id can only be 10 characters long" + '\n');
+            result = false;
+        }
+
+        return result;
+    }
+
+    public static boolean validNameCheck(String wordToCheck) {
+
+        boolean allLetters = wordToCheck.chars().allMatch(Character::isLetter);
+
+        if(!allLetters) {
+            errorList.add("Name fields must only contain letters" + '\n');
+
+        }
+
+    return allLetters;
     }
 }
