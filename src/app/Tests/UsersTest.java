@@ -41,7 +41,7 @@ public class UsersTest extends TestCase {
 
    boolean valid = users.login("user", "user",false);
    boolean invalid = users.login("notuser", "notuser", false);
-        boolean admin = users.login("admin", "admin", false);
+   boolean admin = users.login("admin", "admin", false);
 
    assertEquals(true, valid);
    assertEquals(false,invalid);

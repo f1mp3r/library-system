@@ -1,6 +1,7 @@
 package app;
 
 import app.models.Books;
+import app.models.Loans;
 import app.models.Users;
 import app.utils.QueryBuilder;
 import javafx.application.Application;
@@ -38,26 +39,27 @@ public class Main extends Application {
 //            put("copies_in_stock", 1);
 //        }});
 
+
 //           add a loan record
 //        Loans loans = new Loans();
 //        loans.insert(new HashMap() {
 //            {
-//                put("student_id", "lopas");
-//                put("isbn", "65464456");
+//                put("user_id", 61);
 //                put("date_borrowed", "2017-02-01");
-//                put("title", "hahaha");
-//                put("date_due", "2016-04-01");
+//                put("date_due", "2016-03-28");
+//                put("book_id", 1);
 //            }
 //        });
 
 
         // region make an admin
 //       users.insert(new HashMap() {{
-//            put("student_id", "randomztest");
-//            put("password", "randomtest");
-//            put("first_name", "Tololo");
-//            put("last_name", "sero");
-//            put("email", "souazp@kitchen.com");
+//           put("id", 50);
+//            put("student_id", "qwerty");
+//            put("password", "qwerty");
+//            put("first_name", "Tololod");
+//            put("last_name", "serdo");
+//            put("email", "souazddap@kitchen.com");
 //            put("phone_number", "2112141");
 //            put("debt", 200);
 //            put("permission", false);

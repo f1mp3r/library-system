@@ -31,7 +31,8 @@ public class Books extends Model {
             "@title as `Title`",
             "@authors as `Authors`",
             "@location as `Location in library`",
-            "@copies_in_stock `Copies available`"
+            "@copies_in_stock `Copies available`",
+
     };
 
     public Books() {
@@ -126,7 +127,7 @@ public class Books extends Model {
             books.update(bookUpdate, getBookId);
 
             //check if book was overdue, if so add debt to the user.
-            HashMap dates = loans.getByColumn("id", Integer.toString(bookId));
+            HashMap dates = loans.getByColumn("book_id", Integer.toString(bookId));
             LocalDate borrowDate = LocalDate.parse(dates.get("date_borrowed").toString());
             LocalDate returnedDate = LocalDate.parse(dates.get("date_returned").toString());
             long daysPassed = DAYS.between(borrowDate, returnedDate);

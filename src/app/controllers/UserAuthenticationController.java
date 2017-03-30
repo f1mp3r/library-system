@@ -1,6 +1,7 @@
 package app.controllers;
 
 
+import app.models.Loans;
 import app.models.Users;
 import app.utils.InputValidation;
 import app.utils.Screen;
@@ -57,12 +58,16 @@ public class UserAuthenticationController {
 
         if (login) {
             ((Node) (event.getSource())).getScene().getWindow().hide();
-
+             Loans loans = new Loans();
             try {
                 if (admin) {
                     this.loadLibraryHomeScreenViewForStaff();
                 } else {
                     this.loadLibraryHomeScreenView();
+                    if(loans.checkIfDue(Users.getLoggedInUserTableID())) {
+                        Screen.popup("WARNING","You have Books Overdue");
+                    }
+
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());

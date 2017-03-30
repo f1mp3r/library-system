@@ -105,7 +105,7 @@ public class Users extends Model {
 
     public String getLoanedBooksQuery() {
         return this.queryBuilder
-                .select(Books.memberVisibleFields)
+                .select(Loans.memberVisibleFields)
                 .joinInner("loans", "users.id = loans.user_id")
                 .joinInner("books", "books.id = loans.book_id")
                 .where("id", "=", String.valueOf(Users.getLoggedInUserTableID()), "users")

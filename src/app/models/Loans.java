@@ -1,10 +1,14 @@
 package app.models;
 
 import app.utils.QueryBuilder;
+import app.utils.Screen;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -15,6 +19,17 @@ public class Loans extends Model {
         super();
         this.table = "loans";
     }
+
+    public static String[] memberVisibleFields = new String[]{
+            "@books.id as `#`",
+            "@isbn as `ISBN`",
+            "@title as `Title`",
+            "@authors as `Authors`",
+            "@location as `Location in library`",
+            "@copies_in_stock `Copies available`",
+            "@date_due as `Due_date`",
+
+    };
 
     public int getOnLoanCount(String userId) {
         int rowCount = 0;
@@ -63,7 +78,6 @@ public class Loans extends Model {
                     .where("id", "=", userId, "users")
                     .where("returned", "=", "0", "loans")
                     .build();
-
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
@@ -86,4 +100,37 @@ public class Loans extends Model {
 
         return result;
     }
+
+    public boolean  checkIfDue(int userID) {
+        Boolean x = false;
+        try {
+
+            String selectQuery = "SELECT date_due FROM loans where `user_id`="+userID;
+
+            PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
+
+
+
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+            while (resultSet.next()) {
+
+               Date due = resultSet.getDate("date_due");
+                System.out.println(resultSet.getDate("date_due"));
+                if (due.before(new Date())) {
+                   x = true;
+                }else {
+                    System.out.println("nada");
+                }
+
+
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return x;
+
 }
+}
+
+
