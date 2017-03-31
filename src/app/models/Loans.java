@@ -1,13 +1,10 @@
 package app.models;
 
 import app.utils.QueryBuilder;
-import app.utils.Screen;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -15,11 +12,6 @@ import java.util.HashMap;
  * Created by Thez on 3/1/2017.
  */
 public class Loans extends Model {
-    public Loans() {
-        super();
-        this.table = "loans";
-    }
-
     public static String[] memberVisibleFields = new String[]{
             "@books.id as `#`",
             "@isbn as `ISBN`",
@@ -30,6 +22,11 @@ public class Loans extends Model {
             "@date_due as `Due_date`",
 
     };
+
+    public Loans() {
+        super();
+        this.table = "loans";
+    }
 
     public int getOnLoanCount(String userId) {
         int rowCount = 0;
@@ -78,6 +75,7 @@ public class Loans extends Model {
                     .where("id", "=", userId, "users")
                     .where("returned", "=", "0", "loans")
                     .build();
+            System.out.println(selectQuery + "!!!!!!!!!!!!!!!!!!!!!!!!!");
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
@@ -101,36 +99,35 @@ public class Loans extends Model {
         return result;
     }
 
-    public boolean  checkIfDue(int userID) {
+    public boolean checkIfDue(int userID) {
         Boolean x = false;
         try {
 
-            String selectQuery = "SELECT date_due FROM loans where `user_id`="+userID;
+            String selectQuery = "SELECT date_due FROM loans where `returned`='yes' AND `user_id`=" + userID;
 
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
-
 
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
             while (resultSet.next()) {
 
-               Date due = resultSet.getDate("date_due");
+                Date due = resultSet.getDate("date_due");
                 System.out.println(resultSet.getDate("date_due"));
                 if (due.before(new Date())) {
-                   x = true;
-                }else {
+                    x = true;
+                } else {
                     System.out.println("nada");
                 }
 
 
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
         return x;
 
-}
+    }
 }
 
 

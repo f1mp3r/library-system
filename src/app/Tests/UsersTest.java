@@ -2,11 +2,8 @@ package app.Tests;
 
 import app.models.Users;
 import junit.framework.TestCase;
-import org.junit.Test;
 
 import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Thez on 3/28/2017.
@@ -39,13 +36,13 @@ public class UsersTest extends TestCase {
         users.insert(newUserInvalid);
 
 
-   boolean valid = users.login("user", "user",false);
-   boolean invalid = users.login("notuser", "notuser", false);
-   boolean admin = users.login("admin", "admin", false);
+        boolean valid = users.login("user", "user", false);
+        boolean invalid = users.login("notuser", "notuser", false);
+        boolean admin = users.login("admin", "admin", false);
 
-   assertEquals(true, valid);
-   assertEquals(false,invalid);
-   assertEquals(false,admin);
+        assertEquals(true, valid);
+        assertEquals(false, invalid);
+        assertEquals(false, admin);
 
     }
 
@@ -71,18 +68,16 @@ public class UsersTest extends TestCase {
 
         users.insert(newAdmin);
 
-       boolean admin = users.loginStaff("admin2","admin2");
-       boolean user = users.loginStaff("user2","user2");
+        boolean admin = users.loginStaff("admin2", "admin2");
+        boolean user = users.loginStaff("user2", "user2");
 
-       assertEquals(true,admin);
-       assertEquals(false,user);
+        assertEquals(true, admin);
+        assertEquals(false, user);
     }
 
     public void testInsert() throws Exception {
 
     }
-
-
 
 
 }

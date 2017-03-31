@@ -3,19 +3,17 @@ package app.Tests;
 import app.utils.InputValidation;
 import junit.framework.TestCase;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by Thez on 3/28/2017.
  */
 public class InputValidationTest extends TestCase {
     public void testIsValidEmailAddress() throws Exception {
 
-            boolean email=  InputValidation.isValidEmailAddress("realemail@real.com");
-            boolean emailfake = InputValidation. isValidEmailAddress("notemail");
+        boolean email = InputValidation.isValidEmailAddress("realemail@real.com");
+        boolean emailfake = InputValidation.isValidEmailAddress("notemail");
 
-            assertEquals(true,email);
-            assertEquals(false, emailfake);
+        assertEquals(true, email);
+        assertEquals(false, emailfake);
 
     }
 
@@ -58,7 +56,7 @@ public class InputValidationTest extends TestCase {
         boolean is11 = InputValidation.lengthCheckForStudentId("12345678910");
 
         assertEquals(true, is10);
-        assertEquals(false,is11);
+        assertEquals(false, is11);
 
     }
 
@@ -69,7 +67,7 @@ public class InputValidationTest extends TestCase {
         boolean isNot = InputValidation.validNameCheck("2341");
 
         assertEquals(true, isValidName);
-        assertEquals(false,isNot);
+        assertEquals(false, isNot);
 
     }
 

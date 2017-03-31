@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 public class Users extends Model {
 
-    public static String[] memberVisibleFields = new String[] {
+    public static String[] memberVisibleFields = new String[]{
             "@id as `#`",
             "@email as `E-Mail`",
             "@first_name as `First Name`",

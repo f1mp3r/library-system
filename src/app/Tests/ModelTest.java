@@ -26,15 +26,16 @@ public class ModelTest extends TestCase {
         users.insert(newUser);
         HashMap data = users.getByColumn("student_id", "test1");
         System.out.println(data);
-        assertEquals("test1",data.get("student_id"));
-        assertEquals("test3",data.get("first_name"));
-        assertEquals("test4",data.get("last_name"));
-        assertEquals("test5",data.get("phone_number"));
-        assertEquals("test@test.test",data.get("email"));
+        assertEquals("test1", data.get("student_id"));
+        assertEquals("test3", data.get("first_name"));
+        assertEquals("test4", data.get("last_name"));
+        assertEquals("test5", data.get("phone_number"));
+        assertEquals("test@test.test", data.get("email"));
         assertEquals("0", data.get("permission"));
 
 
     }
+
     @Test
     public void testGetByColumn() throws Exception {
 
@@ -51,15 +52,16 @@ public class ModelTest extends TestCase {
 
         HashMap data = users.getByColumn("student_id", "test11");
         System.out.println(data);
-        assertEquals("test11",data.get("student_id"));
-        assertEquals("test33",data.get("first_name"));
-        assertEquals("test44",data.get("last_name"));
-        assertEquals("test55",data.get("phone_number"));
-        assertEquals("test66@test.test",data.get("email"));
+        assertEquals("test11", data.get("student_id"));
+        assertEquals("test33", data.get("first_name"));
+        assertEquals("test44", data.get("last_name"));
+        assertEquals("test55", data.get("phone_number"));
+        assertEquals("test66@test.test", data.get("email"));
         assertEquals("0", data.get("permission"));
 
 
     }
+
     @Test
     public void testGetByID() throws Exception {
 
@@ -74,13 +76,13 @@ public class ModelTest extends TestCase {
         users.insert(newUser);
 
         HashMap dataToGetID = users.getByColumn("student_id", "test111");
-        int id =Integer.parseInt( dataToGetID.get("id").toString());
+        int id = Integer.parseInt(dataToGetID.get("id").toString());
         HashMap data = users.getById(id);
-        assertEquals("test111",data.get("student_id"));
-        assertEquals("test333",data.get("first_name"));
-        assertEquals("test444",data.get("last_name"));
-        assertEquals("test555",data.get("phone_number"));
-        assertEquals("test666@test.test",data.get("email"));
+        assertEquals("test111", data.get("student_id"));
+        assertEquals("test333", data.get("first_name"));
+        assertEquals("test444", data.get("last_name"));
+        assertEquals("test555", data.get("phone_number"));
+        assertEquals("test666@test.test", data.get("email"));
         assertEquals("0", data.get("permission"));
 
     }
@@ -98,7 +100,7 @@ public class ModelTest extends TestCase {
         newUser.put("permission", 0);
         users.insert(newUser);
         HashMap dataToGetID = users.getByColumn("student_id", "testy");
-        int id =Integer.parseInt( dataToGetID.get("id").toString());
+        int id = Integer.parseInt(dataToGetID.get("id").toString());
 
         HashMap updateUser = new HashMap();
         updateUser.put("student_id", "'testyedit'");
@@ -111,11 +113,11 @@ public class ModelTest extends TestCase {
 
 
         HashMap data2 = users.getByColumn("student_id", "testyedit");
-        assertEquals(("testyedit"),data2.get("student_id"));
-        assertEquals(("testyedited"),data2.get("first_name"));
-        assertEquals(("testyedited"),data2.get("last_name"));
-        assertEquals(("testyedited"),data2.get("phone_number"));
-        assertEquals(("testy@test.edited"),data2.get("email"));
+        assertEquals(("testyedit"), data2.get("student_id"));
+        assertEquals(("testyedited"), data2.get("first_name"));
+        assertEquals(("testyedited"), data2.get("last_name"));
+        assertEquals(("testyedited"), data2.get("phone_number"));
+        assertEquals(("testy@test.edited"), data2.get("email"));
         assertEquals(("1"), data2.get("permission"));
 
 

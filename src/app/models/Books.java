@@ -3,15 +3,9 @@ package app.models;
 import app.utils.QueryBuilder;
 import app.utils.Screen;
 import app.utils.TableViewControls;
-import javafx.application.Platform;
-import javafx.beans.binding.BooleanBinding;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -41,8 +35,11 @@ public class Books extends Model {
     }
 
     public void borrowBook(TableView tableBooks) {
+
         Books books = new Books();
+        Users users = new Users();
         HashMap<String, String> bookUpdate = new HashMap<>();
+        Reservations rez = new Reservations();
 
         Loans loans = new Loans();
         TableViewControls twg = new TableViewControls();
@@ -52,10 +49,14 @@ public class Books extends Model {
 
         int bookId = Integer.parseInt(twg.getRowValue(tableBooks, 0));
         HashMap bookInfo = books.getById(bookId);
+        HashMap userInfo = users.getById(Users.getLoggedInUserTableID());
+
 
         int copiesAvailable = Integer.parseInt(bookInfo.get("copies_in_stock").toString());
         int loaned = loans.getOnLoanCount(String.valueOf(Users.getLoggedInUserTableID()));
         String bookTitle = bookInfo.get("title").toString();
+        int reserved = Integer.parseInt(bookInfo.get("currently_reserved").toString());
+
 
         boolean checkForSameBook = loans.checkForSameBook(String.valueOf(Users.getLoggedInUserTableID()), String.valueOf(bookId));
 
@@ -63,7 +64,7 @@ public class Books extends Model {
         LocalDate due = date.toLocalDate().plusDays(8);
 
         //If borrow limit is not exceeded and if book is in stock
-        if ((loaned <= 10) && copiesAvailable >= 1 && checkForSameBook) {
+        if ((loaned <= 10) && copiesAvailable >= 1 && checkForSameBook && reserved < copiesAvailable) {
             //Display a popup box asking to confirm choice
             Optional<ButtonType> result = Screen.popup("CONFIRMATION", "You are about to borrow:" + "\n" + bookTitle + "\n" + "Is this correct?");
             if (result.get() == ButtonType.OK) {
@@ -84,13 +85,75 @@ public class Books extends Model {
                 twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
                 //end of loan creation
             }
-        } else if (loaned >= 10 & copiesAvailable >= 1) {
+        } else if (loaned >= 10) {
             //Display messages that you have reached maximum borrow limit or if there is no books available
             Screen.popup("INFORMATION", "You are already borrowing the maximum amount of books allowed.");
+
         } else if (!checkForSameBook) {
             Screen.popup("INFORMATION", "You are already borrowing a copy of this book");
-        } else {
-            Screen.popup("INFORMATION", "There are no books available");
+        } else if (copiesAvailable <= reserved) {
+            HashMap rezInfo = rez.getByUserAndBookAndTitle(Integer.toString(Users.getLoggedInUserTableID()), Integer.toString(bookId), "'" + bookTitle + "'");
+
+            int checkReservationId = 0;
+            int checkReservationBookId = 0;
+
+            int earliestUserIdToReserve = rez.getEarliestDate(bookTitle);
+            System.out.println(earliestUserIdToReserve + "KK");
+
+            if (rezInfo.containsKey("user_id")) {
+                checkReservationId = Integer.parseInt(rezInfo.get("user_id").toString());
+                checkReservationBookId = Integer.parseInt(rezInfo.get("book_id").toString());
+            } else {
+
+            }
+
+
+            if (checkReservationBookId == bookId && checkReservationId == Users.getLoggedInUserTableID() && copiesAvailable > 0 && earliestUserIdToReserve == Users.getLoggedInUserTableID()) {
+                Optional<ButtonType> result = Screen.popup("CONFIRMATION", "You are about to borrow your Reserved book:" + "\n" + bookTitle + "\n" + "Is this correct?");
+                if (result.get() == ButtonType.OK) {
+                    // ... user chose OK
+                    // create a loan record for the logged in user and update book info
+                    loans.insert(new HashMap() {
+                        {
+                            put("user_id", Users.getLoggedInUserTableID());
+                            put("book_id", bookId);
+                            put("date_borrowed", date);
+                            put("date_due", due);
+                        }
+                    });
+
+                    bookUpdate.put("copies_in_stock", "copies_in_stock -1");
+                    bookUpdate.put("currently_on_loan", "currently_on_loan +1");
+                    bookUpdate.put("currently_reserved", "currently_reserved -1");
+                    books.update(bookUpdate, bookId);
+                    earliestUserIdToReserve = rez.getEarliestDate(bookTitle);
+
+                    HashMap deleteInfo = new HashMap();
+                    deleteInfo.put("id", rezInfo.get("id"));
+                    rez.delete(deleteInfo);
+                    twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
+                    //end of loan creation
+                }
+
+            } else {
+                if (!rezInfo.containsKey("user_id")) {
+                    Optional<ButtonType> result = Screen.popup("CONFIRMATION", "The book" + "\n" + bookTitle + "\n" + "Is not available, But you can reserve it, by pressing okay");
+                    if (result.get() == ButtonType.OK) {
+                        // ... user chose OK
+                        rez.reserve(bookTitle, date, Users.getLoggedInUserTableID(), bookId, bookUpdate, books);
+                    }
+                } else {
+                    Screen.popup("INFORMATION", "Book is not available yet, but you have already rezerved it");
+                }
+            }
+//        }else {
+//            Screen.popup("INFORMATION", "There are no books available");
+//            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "The book" + "\n" + bookTitle + "\n" + "Is no available, But you can reserve it, by pressing okay");
+//            if (result.get() == ButtonType.OK) {
+//                // ... user chose OK
+//                rez.reserve(bookTitle,date,Users.getLoggedInUserTableID(),bookId,bookUpdate,books);
+//            }
+
         }
     }
 
@@ -122,6 +185,7 @@ public class Books extends Model {
             updateLoans.put("date_returned", "'" + date.toLocalDate() + "'");
             loans.update(updateLoans, Integer.parseInt(loanInfo.get("id").toString()));
 
+
             bookUpdate.put("copies_in_stock", "copies_in_stock +1");
             bookUpdate.put("currently_on_loan", "currently_on_loan -1");
             books.update(bookUpdate, getBookId);
@@ -147,6 +211,7 @@ public class Books extends Model {
 
         twg.setTable(users.getLoanedBooksQuery(), userLoansTable);
     }
+
 
     public void refreshTable(TableViewControls table, TableView tableView, TextField searchField, boolean forceEmpty) {
         String searchKey = "%" + searchField.getText() + "%";

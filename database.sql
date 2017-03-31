@@ -5,6 +5,17 @@ USE library;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS loans;
+DROP TABLE IF EXISTS reservations;
+
+CREATE TABLE reservations(
+`id`				INT                     NOT NULL	AUTO_INCREMENT,
+`title` varchar(60) NOT NULL,
+`date_left`  		DATE NULL,
+`user_id`				int(13)			NOT NULL,
+`book_id`				int(13)             NOT NULL,
+PRIMARY KEY (id)
+)
+ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE loans(
 `id`				INT                     NOT NULL	AUTO_INCREMENT,
@@ -26,6 +37,7 @@ CREATE TABLE books(
 `location` VARCHAR(10)	NOT NULL,
 `copies_in_stock`		INT		NOT NULL DEFAULT 0,
 `currently_on_loan`  INT	NOT NULL DEFAULT 0,
+`currently_reserved`  INT	NOT NULL DEFAULT 0,
 `authors` VARCHAR(100) NOT NULL,
 UNIQUE (isbn),
 INDEX (title)

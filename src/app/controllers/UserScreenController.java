@@ -51,11 +51,11 @@ public class UserScreenController implements Initializable {
             result.ifPresent(input -> {
 
                 HashMap updateData = new HashMap();
-                int checkForEmail = users.getByColumn("email",input).size();
-                if(checkForEmail==0) {
+                int checkForEmail = users.getByColumn("email", input).size();
+                if (checkForEmail == 0) {
                     updateData.put("email", ("'" + input + "'"));
                     users.update(updateData, Users.getLoggedInUserTableID());
-                }else{
+                } else {
                     Screen.popup("WARNING", "Sorry, this email is  already in use");
                 }
             });

@@ -1,7 +1,6 @@
 package app.models;
 
 import app.utils.ConnectionManager;
-import app.utils.QueryBuilder;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
@@ -88,6 +87,36 @@ public class Model {
             rowsChanged = statement.getUpdateCount();
             statement.getConnection().close();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return rowsChanged;
+    }
+
+    public int delete(HashMap data) {
+        int rowsChanged = 0;
+        try {
+            String insertQuery = String.format(
+                    "DELETE FROM `" + this.table + "` Where %s = %s",
+                    String.join(", ", data.keySet()),
+                    String.join(", ", Collections.nCopies(data.size(), "?"))
+            );
+            System.out.println(insertQuery);
+            PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(insertQuery);
+
+            Set set = data.entrySet();
+            Iterator i = set.iterator();
+
+            int k = 1;
+            while (i.hasNext()) {
+                Map.Entry mapElement = (Map.Entry) i.next();
+                statement.setObject(k++, mapElement.getValue());
+            }
+
+            statement.execute();
+            rowsChanged = statement.getUpdateCount();
+            statement.getConnection().close();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 

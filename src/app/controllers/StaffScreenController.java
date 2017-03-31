@@ -8,7 +8,6 @@ import app.utils.TableViewControls;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -51,7 +50,7 @@ public class StaffScreenController implements Initializable {
         this.screen = new Screen(this.getClass());
         this.refreshTable(false);
         books.refreshTable(twg, tableBooks, searchFieldBooks, false);
-        tabBooks.setOnSelectionChanged(t ->         books.refreshTable(twg, tableBooks, searchFieldBooks, false));
+        tabBooks.setOnSelectionChanged(t -> books.refreshTable(twg, tableBooks, searchFieldBooks, false));
         ContextMenu menu = new ContextMenu();
         MenuItem removeMenuItem = new MenuItem("Remove Fine");
         MenuItem editUserContactInfo = new MenuItem("Write Potato");
@@ -102,14 +101,14 @@ public class StaffScreenController implements Initializable {
 
         //right click on user on staff user list. Option Remove Fine;
         removeMenuItem.setOnAction(event -> {
-            Optional<ButtonType> result = Screen.popup("CONFIRMATION","Are you sure you want to remove debt for User "+Users.getLoggedInUserName());
+            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you want to remove debt for User " + Users.getLoggedInUserName());
 
-            if (result.get() == ButtonType.OK){
+            if (result.get() == ButtonType.OK) {
                 // ... user chose OK
                 HashMap fine = new HashMap();
                 Users users = new Users();
                 fine.put("debt", "0");
-               int row = Integer.parseInt(twg.getRowValue(tableUsers,0));
+                int row = Integer.parseInt(twg.getRowValue(tableUsers, 0));
                 users.update(fine, row);
                 this.refreshTable(false);
             } else {
@@ -124,7 +123,6 @@ public class StaffScreenController implements Initializable {
 
         });
     }
-
 
 
     @FXML

@@ -58,14 +58,14 @@ public class UserAuthenticationController {
 
         if (login) {
             ((Node) (event.getSource())).getScene().getWindow().hide();
-             Loans loans = new Loans();
+            Loans loans = new Loans();
             try {
                 if (admin) {
                     this.loadLibraryHomeScreenViewForStaff();
                 } else {
                     this.loadLibraryHomeScreenView();
-                    if(loans.checkIfDue(Users.getLoggedInUserTableID())) {
-                        Screen.popup("WARNING","You have Books Overdue");
+                    if (loans.checkIfDue(Users.getLoggedInUserTableID())) {
+                        Screen.popup("WARNING", "You have Books Overdue");
                     }
 
                 }
