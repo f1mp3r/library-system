@@ -59,12 +59,20 @@ public class Books extends Model {
 
 
         boolean checkForSameBook = loans.checkForSameBook(String.valueOf(Users.getLoggedInUserTableID()), String.valueOf(bookId));
+        HashMap rezInfo = rez.getByUserAndBookAndTitle(Integer.toString(Users.getLoggedInUserTableID()), Integer.toString(bookId), "'" + bookTitle + "'");
 
         java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
         LocalDate due = date.toLocalDate().plusDays(8);
+        int checkReservationId = 0;
+        int checkReservationBookId = 0;
+        if (rezInfo.containsKey("user_id")) {
+            checkReservationId = Integer.parseInt(rezInfo.get("user_id").toString());
+            checkReservationBookId = Integer.parseInt(rezInfo.get("book_id").toString());
+        } else {
 
+        }
         //If borrow limit is not exceeded and if book is in stock
-        if ((loaned <= 10) && copiesAvailable >= 1 && checkForSameBook && reserved < copiesAvailable) {
+        if (checkReservationBookId != bookId && checkReservationId != Users.getLoggedInUserTableID() && (loaned <= 10) && copiesAvailable >= 1 && checkForSameBook && reserved < copiesAvailable) {
             //Display a popup box asking to confirm choice
             Optional<ButtonType> result = Screen.popup("CONFIRMATION", "You are about to borrow:" + "\n" + bookTitle + "\n" + "Is this correct?");
             if (result.get() == ButtonType.OK) {
@@ -91,21 +99,11 @@ public class Books extends Model {
 
         } else if (!checkForSameBook) {
             Screen.popup("INFORMATION", "You are already borrowing a copy of this book");
-        } else if (copiesAvailable <= reserved) {
-            HashMap rezInfo = rez.getByUserAndBookAndTitle(Integer.toString(Users.getLoggedInUserTableID()), Integer.toString(bookId), "'" + bookTitle + "'");
+        } else {
 
-            int checkReservationId = 0;
-            int checkReservationBookId = 0;
 
             int earliestUserIdToReserve = rez.getEarliestDate(bookTitle);
             System.out.println(earliestUserIdToReserve + "KK");
-
-            if (rezInfo.containsKey("user_id")) {
-                checkReservationId = Integer.parseInt(rezInfo.get("user_id").toString());
-                checkReservationBookId = Integer.parseInt(rezInfo.get("book_id").toString());
-            } else {
-
-            }
 
 
             if (checkReservationBookId == bookId && checkReservationId == Users.getLoggedInUserTableID() && copiesAvailable > 0 && earliestUserIdToReserve == Users.getLoggedInUserTableID()) {
@@ -113,28 +111,24 @@ public class Books extends Model {
                 if (result.get() == ButtonType.OK) {
                     // ... user chose OK
                     // create a loan record for the logged in user and update book info
-                    loans.insert(new HashMap() {
-                        {
-                            put("user_id", Users.getLoggedInUserTableID());
-                            put("book_id", bookId);
-                            put("date_borrowed", date);
-                            put("date_due", due);
-                        }
-                    });
+                    this.updateBookInfoReservation(loans, bookId, date, due, bookUpdate, rezInfo, rez, twg, queryBooks, tableBooks);
 
-                    bookUpdate.put("copies_in_stock", "copies_in_stock -1");
-                    bookUpdate.put("currently_on_loan", "currently_on_loan +1");
-                    bookUpdate.put("currently_reserved", "currently_reserved -1");
-                    books.update(bookUpdate, bookId);
                     earliestUserIdToReserve = rez.getEarliestDate(bookTitle);
 
-                    HashMap deleteInfo = new HashMap();
-                    deleteInfo.put("id", rezInfo.get("id"));
-                    rez.delete(deleteInfo);
-                    twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
-                    //end of loan creation
+
                 }
 
+            } else if (checkReservationBookId == bookId && checkReservationId == Users.getLoggedInUserTableID() && copiesAvailable >= reserved && earliestUserIdToReserve != Users.getLoggedInUserTableID()) {
+                Optional<ButtonType> result = Screen.popup("CONFIRMATION", "You are about to borrow your Reserved book:" + "\n" + bookTitle + "\n" + "Is this correct?");
+                if (result.get() == ButtonType.OK) {
+                    // ... user chose OK
+                    // create a loan record for the logged in user and update book info
+
+                    this.updateBookInfoReservation(loans, bookId, date, due, bookUpdate, rezInfo, rez, twg, queryBooks, tableBooks);
+                    earliestUserIdToReserve = rez.getEarliestDate(bookTitle);
+
+
+                }
             } else {
                 if (!rezInfo.containsKey("user_id")) {
                     Optional<ButtonType> result = Screen.popup("CONFIRMATION", "The book" + "\n" + bookTitle + "\n" + "Is not available, But you can reserve it, by pressing okay");
@@ -146,15 +140,32 @@ public class Books extends Model {
                     Screen.popup("INFORMATION", "Book is not available yet, but you have already rezerved it");
                 }
             }
-//        }else {
-//            Screen.popup("INFORMATION", "There are no books available");
-//            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "The book" + "\n" + bookTitle + "\n" + "Is no available, But you can reserve it, by pressing okay");
-//            if (result.get() == ButtonType.OK) {
-//                // ... user chose OK
-//                rez.reserve(bookTitle,date,Users.getLoggedInUserTableID(),bookId,bookUpdate,books);
-//            }
+
 
         }
+    }
+
+    public void updateBookInfoReservation(Loans loans, int bookId, Date date, LocalDate due, HashMap bookUpdate, HashMap rezInfo, Reservations rez, TableViewControls twg, QueryBuilder queryBooks, TableView tableBooks) {
+
+        loans.insert(new HashMap() {
+            {
+                put("user_id", Users.getLoggedInUserTableID());
+                put("book_id", bookId);
+                put("date_borrowed", date);
+                put("date_due", due);
+            }
+        });
+
+        bookUpdate.put("copies_in_stock", "copies_in_stock -1");
+        bookUpdate.put("currently_on_loan", "currently_on_loan +1");
+        bookUpdate.put("currently_reserved", "currently_reserved -1");
+        this.update(bookUpdate, bookId);
+
+        HashMap deleteInfo = new HashMap();
+        deleteInfo.put("id", rezInfo.get("id"));
+        rez.delete(deleteInfo);
+        twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
+        //end of loan creation
     }
 
     public void returnBook(TableView userLoansTable) {
