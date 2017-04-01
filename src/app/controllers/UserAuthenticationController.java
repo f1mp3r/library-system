@@ -35,7 +35,7 @@ public class UserAuthenticationController {
     private Label infoBox;
     // todo: add descriptive names
     @FXML
-    private TextField firlstNameField, lastNameField, phoneNumberField, emailField, registerPasswordField, registerStudentIdField;
+    private TextField firstNameField, lastNameField, phoneNumberField, emailField, registerPasswordField, registerStudentIdField;
     private String username;
     private String password;
 
@@ -102,14 +102,14 @@ public class UserAuthenticationController {
 
     @FXML
     void onRegisterSubmit(ActionEvent event) throws SQLDataException {
-        HashMap newUser = new HashMap();
+        HashMap<String, String> newUser = new HashMap();
         newUser.put("student_id", registerStudentIdField.getText());
         newUser.put("password", registerPasswordField.getText());
-        newUser.put("first_Name", firlstNameField.getText());
-        newUser.put("last_Name", lastNameField.getText());
+        newUser.put("first_name", firstNameField.getText());
+        newUser.put("last_name", lastNameField.getText());
         newUser.put("phone_number", phoneNumberField.getText());
         newUser.put("email", emailField.getText());
-        newUser.put("permission", this.users.getCount() == 0); // if there are no users, the first user is an admin
+        newUser.put("permission", String.valueOf(this.users.getCount() == 0)); // if there are no users, the first user is an admin
 
         if (this.users.validate(newUser)) {
             // check if email is in use

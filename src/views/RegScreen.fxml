@@ -19,7 +19,7 @@
          </font>
       </Text>
       <TextField fx:id="registerStudentIdField" layoutX="115.0" layoutY="100.0" />
-      <TextField fx:id="firlstNameField" layoutX="115.0" layoutY="136.0" />
+      <TextField fx:id="firstNameField" layoutX="115.0" layoutY="136.0" />
       <TextField fx:id="lastNameField" layoutX="115.0" layoutY="172.0" />
       <TextField fx:id="phoneNumberField" layoutX="115.0" layoutY="209.0" />
       <TextField fx:id="emailField" layoutX="115.0" layoutY="246.0" />

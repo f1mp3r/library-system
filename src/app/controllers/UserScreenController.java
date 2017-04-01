@@ -55,7 +55,10 @@ public class UserScreenController implements Initializable {
                     HashMap checkForEmail = users.getByColumn("email", input);
                     if (checkForEmail.size() == 0 || Integer.parseInt(checkForEmail.get("id").toString()) == Users.getLoggedInUserTableID()) {
                         updateData.put("email", ("'" + input + "'"));
-                        users.update(updateData, Users.getLoggedInUserTableID());
+
+                        if (1 == users.update(updateData, Users.getLoggedInUserTableID())) {
+                            Screen.popup("INFORMATION", "You have successfully updated your email address!");
+                        }
                     } else {
                         Screen.popup("WARNING", "Sorry, this email is  already in use");
                     }
@@ -75,7 +78,7 @@ public class UserScreenController implements Initializable {
                     updateData.put("phone_number", "'" + input + "'");
 
                     if (1 == users.update(updateData, Users.getLoggedInUserTableID())) {
-                        Screen.popup("INFORMATION", "You have successfully updated you phone number!");
+                        Screen.popup("INFORMATION", "You have successfully updated your phone number!");
                     }
                 } else {
                     Screen.popup("WARNING", InputValidation.getErrorList());
