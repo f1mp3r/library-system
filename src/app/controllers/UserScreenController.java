@@ -3,6 +3,7 @@ package app.controllers;
 import app.models.Books;
 import app.models.Loans;
 import app.models.Users;
+import app.utils.InputValidation;
 import app.utils.QueryBuilder;
 import app.utils.Screen;
 import app.utils.TableViewControls;
@@ -49,31 +50,38 @@ public class UserScreenController implements Initializable {
 
             Optional<String> result = Screen.makeSingleInputDialog(changeEmail, "Enter New Email here", "Email Change", "Email Change", "Please enter your new Email");
             result.ifPresent(input -> {
-
-                HashMap updateData = new HashMap();
-                int checkForEmail = users.getByColumn("email", input).size();
-                if (checkForEmail == 0) {
-                    updateData.put("email", ("'" + input + "'"));
-                    users.update(updateData, Users.getLoggedInUserTableID());
+                if (InputValidation.isValidEmailAddress(input) && InputValidation.lengthCheck(input)) {
+                    HashMap updateData = new HashMap();
+                    HashMap checkForEmail = users.getByColumn("email", input);
+                    if (checkForEmail.size() == 0 || Integer.parseInt(checkForEmail.get("id").toString()) == Users.getLoggedInUserTableID()) {
+                        updateData.put("email", ("'" + input + "'"));
+                        users.update(updateData, Users.getLoggedInUserTableID());
+                    } else {
+                        Screen.popup("WARNING", "Sorry, this email is  already in use");
+                    }
                 } else {
-                    Screen.popup("WARNING", "Sorry, this email is  already in use");
+                    Screen.popup("WARNING", InputValidation.getErrorList());
+                    InputValidation.errorList.clear();
                 }
             });
-
-
         });
 
         changePhone.setOnAction((ActionEvent a) -> {
-
             Optional<String> result = Screen.makeSingleInputDialog(changePhone, "Enter New Phone number here", "Phone Number Change", "Phone Number Change", "Please enter your new Phone Number");
+
             result.ifPresent(input -> {
-                HashMap updateData = new HashMap();
-                updateData.put("phone_number", ("'" + input + "'"));
-                users.update(updateData, Users.getLoggedInUserTableID());
+                if (InputValidation.isValidPhoneNumber(input) && InputValidation.lengthCheck(input)) {
+                    HashMap updateData = new HashMap();
+                    updateData.put("phone_number", "'" + input + "'");
 
+                    if (1 == users.update(updateData, Users.getLoggedInUserTableID())) {
+                        Screen.popup("INFORMATION", "You have successfully updated you phone number!");
+                    }
+                } else {
+                    Screen.popup("WARNING", InputValidation.getErrorList());
+                    InputValidation.errorList.clear();
+                }
             });
-
-
         });
 
         tableViewControls.setTable(this.users.getLoanedBooksQuery(), userLoansTable);

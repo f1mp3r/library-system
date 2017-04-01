@@ -70,8 +70,6 @@ public class Screen {
     }
 
     public static  Optional<String> makeSingleInputDialog(MenuItem objectOfChange, String textfieldPrompt, String title, String headertext, String contentText) {
-
-
             TextInputDialog dialog = new TextInputDialog(textfieldPrompt);
             dialog.setTitle(title);
             dialog.setHeaderText(headertext);

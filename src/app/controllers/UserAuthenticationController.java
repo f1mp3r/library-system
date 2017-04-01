@@ -23,8 +23,8 @@ import java.util.HashMap;
  */
 public class UserAuthenticationController {
 
-    Users users;
-    Screen screen;
+    private Users users;
+    private Screen screen;
     @FXML
     private Button loginButtonx;
     @FXML
