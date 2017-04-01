@@ -57,7 +57,17 @@ public class InputValidationTest extends TestCase {
 
         assertEquals(true, is10);
         assertEquals(false, is11);
+    }
 
+    public void testPhoneNumber() throws Exception {
+        // phone number must contain only numbers
+        boolean correctNumber = InputValidation.isValidPhoneNumber("0897037645");
+        boolean wrongNumber = InputValidation.lengthCheckForStudentId("04568984sd45");
+
+        // phone number should not exceed
+
+        assertEquals(true, correctNumber);
+        assertEquals(false, wrongNumber);
     }
 
     public void testValidNameCheck() throws Exception {
@@ -68,7 +78,5 @@ public class InputValidationTest extends TestCase {
 
         assertEquals(true, isValidName);
         assertEquals(false, isNot);
-
     }
-
 }

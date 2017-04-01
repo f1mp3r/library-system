@@ -79,14 +79,22 @@ public class InputValidation {
     }
 
     public static boolean validNameCheck(String wordToCheck) {
-
         boolean allLetters = wordToCheck.chars().allMatch(Character::isLetter);
 
-        if(!allLetters) {
+        if (!allLetters) {
             errorList.add("Name fields must only contain letters" + '\n');
-
         }
 
-    return allLetters;
+        return allLetters;
+    }
+
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        boolean allLetters = phoneNumber.chars().allMatch(Character::isDigit);
+
+        if (!allLetters) {
+            errorList.add("Phone fields must only contain numbers" + '\n');
+        }
+
+        return allLetters;
     }
 }

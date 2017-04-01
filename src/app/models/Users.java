@@ -1,5 +1,6 @@
 package app.models;
 
+import app.utils.InputValidation;
 import app.utils.QueryBuilder;
 import app.utils.Screen;
 
@@ -119,5 +120,23 @@ public class Users extends Model {
         data.put("password", Users.hash(data.get("password").toString()));
 
         return super.insert(data);
+    }
+
+    /**
+     * Data validation for new user
+     * @param newUser
+     * @return
+     */
+    public boolean validate(HashMap<String, String> newUser) {
+        return InputValidation.isValidEmailAddress(newUser.get("email"))
+                && InputValidation.isValidPassword(newUser.get("password"))
+                && InputValidation.lengthCheck(newUser.get("student_id"))
+                && InputValidation.lengthCheck(newUser.get("first_name"))
+                && InputValidation.lengthCheck(newUser.get("last_name"))
+                && InputValidation.lengthCheck(newUser.get("phone_number"))
+                && InputValidation.isValidPhoneNumber(newUser.get("phone_number"))
+                && InputValidation.validNameCheck(newUser.get("first_name"))
+                && InputValidation.validNameCheck(newUser.get("last_name"))
+                && InputValidation.lengthCheckForStudentId(newUser.get("student_id"));
     }
 }

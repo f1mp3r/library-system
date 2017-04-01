@@ -49,7 +49,7 @@ public class Model {
             rowsChanged = statement.getUpdateCount();
             statement.getConnection().close();
         } catch (SQLException e) {
-            Screen.exception(e);
+            System.out.println(e.getMessage());
         }
 
         return rowsChanged;
@@ -86,7 +86,7 @@ public class Model {
             rowsChanged = statement.getUpdateCount();
             statement.getConnection().close();
         } catch (Exception e) {
-            Screen.exception(e);
+            System.out.println(e.getMessage());
         }
 
         return rowsChanged;
@@ -115,7 +115,7 @@ public class Model {
             rowsChanged = statement.getUpdateCount();
             statement.getConnection().close();
         } catch (SQLException e) {
-            Screen.exception(e);
+            System.out.println(e.getMessage());
         }
 
         return rowsChanged;
@@ -149,7 +149,7 @@ public class Model {
 
             statement.getConnection().close();
         } catch (SQLException e) {
-            Screen.exception(e);
+            System.out.println(e.getMessage());
         }
 
         return result;
@@ -185,10 +185,8 @@ public class Model {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             count = resultSet.getInt(1);
-        }
-        catch(Exception e)
-        {
-            Screen.exception(e);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
         }
 
         return count;

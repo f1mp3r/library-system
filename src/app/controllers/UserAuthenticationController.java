@@ -35,7 +35,7 @@ public class UserAuthenticationController {
     private Label infoBox;
     // todo: add descriptive names
     @FXML
-    private TextField reg2, reg3, reg4, reg5, reg6, reg1;
+    private TextField firlstNameField, lastNameField, phoneNumberField, emailField, registerPasswordField, registerStudentIdField;
     private String username;
     private String password;
 
@@ -102,24 +102,19 @@ public class UserAuthenticationController {
 
     @FXML
     void onRegisterSubmit(ActionEvent event) throws SQLDataException {
-        if (InputValidation.isValidEmailAddress(reg5.getText()) && InputValidation.isValidPassword(reg6.getText())
-                && InputValidation.lengthCheck(reg1.getText()) && InputValidation.lengthCheck(reg2.getText())
-                && InputValidation.lengthCheck(reg3.getText()) && InputValidation.lengthCheck(reg4.getText())
-                && InputValidation.validNameCheck(reg2.getText()) && InputValidation.validNameCheck(reg3.getText())
-                && InputValidation.lengthCheckForStudentId(reg1.getText())) {
+        HashMap newUser = new HashMap();
+        newUser.put("student_id", registerStudentIdField.getText());
+        newUser.put("password", registerPasswordField.getText());
+        newUser.put("first_Name", firlstNameField.getText());
+        newUser.put("last_Name", lastNameField.getText());
+        newUser.put("phone_number", phoneNumberField.getText());
+        newUser.put("email", emailField.getText());
+        newUser.put("permission", this.users.getCount() == 0); // if there are no users, the first user is an admin
 
-            HashMap newUser = new HashMap();
-            newUser.put("student_id", reg1.getText());
-            newUser.put("password", reg6.getText());
-            newUser.put("first_Name", reg2.getText());
-            newUser.put("last_Name", reg3.getText());
-            newUser.put("phone_number", reg4.getText());
-            newUser.put("email", reg5.getText());
-            newUser.put("permission", this.users.getCount() == 0); // if there are no users, the first user is an admin
-
+        if (this.users.validate(newUser)) {
             // check if email is in use
-            int emailExistCheck = users.getByColumn("email", reg5.getText()).size();
-            HashMap checkStudentID = users.getByColumn("student_id", reg1.getText());
+            int emailExistCheck = users.getByColumn("email", emailField.getText()).size();
+            HashMap checkStudentID = users.getByColumn("student_id", registerStudentIdField.getText());
 
             if (emailExistCheck == 0 & (!checkStudentID.containsKey("student_id"))) {
                 // email not in use, continue

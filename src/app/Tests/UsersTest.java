@@ -9,8 +9,12 @@ import java.util.HashMap;
  * Created by Thez on 3/28/2017.
  */
 public class UsersTest extends TestCase {
-    Users users = new Users();
+    Users users;
 
+    @Override
+    public void setUp() {
+        this.users = new Users();
+    }
 
     public void testLoginUser() throws Exception {
 
@@ -22,7 +26,7 @@ public class UsersTest extends TestCase {
         newUser.put("phone_number", "test55");
         newUser.put("email", "user6@test.test");
         newUser.put("permission", 0);
-        users.insert(newUser);
+        this.users.insert(newUser);
 
         HashMap newUserInvalid = new HashMap();
         newUserInvalid.put("student_id", "admin");
@@ -32,17 +36,16 @@ public class UsersTest extends TestCase {
         newUserInvalid.put("phone_number", "test55");
         newUserInvalid.put("email", "admin@test.test");
         newUserInvalid.put("permission", 1);
-        users.insert(newUserInvalid);
+        this.users.insert(newUserInvalid);
 
 
-        boolean valid = users.login("user", "user", false);
-        boolean invalid = users.login("notuser", "notuser", false);
-        boolean admin = users.login("admin", "admin", false);
+        boolean valid = this.users.login("user", "user", false);
+        boolean invalid = this.users.login("notuser", "notuser", false);
+        boolean admin = this.users.login("admin", "admin", false);
 
         assertEquals(true, valid);
         assertEquals(false, invalid);
         assertEquals(false, admin);
-
     }
 
     public void testLoginStaff() throws Exception {
@@ -54,7 +57,7 @@ public class UsersTest extends TestCase {
         notadmin.put("phone_number", "test55");
         notadmin.put("email", "user2@test.test");
         notadmin.put("permission", 0);
-        users.insert(notadmin);
+        this.users.insert(notadmin);
 
         HashMap newAdmin = new HashMap();
         newAdmin.put("student_id", "admin2");
@@ -65,18 +68,31 @@ public class UsersTest extends TestCase {
         newAdmin.put("email", "admi2n@test.test");
         newAdmin.put("permission", 1);
 
-        users.insert(newAdmin);
+        this.users.insert(newAdmin);
 
-        boolean admin = users.loginStaff("admin2", "admin2");
-        boolean user = users.loginStaff("user2", "user2");
+        boolean admin = this.users.loginStaff("admin2", "admin2");
+        boolean user = this.users.loginStaff("user2", "user2");
 
         assertEquals(true, admin);
         assertEquals(false, user);
     }
 
-    public void testInsert() throws Exception {
+    @Override
+    public void tearDown() {
+        // delete the test data
+        String[] testData = new String[7];
+        testData[0] = "test66@test.test";
+        testData[1] = "test666@test.test";
+        testData[2] = "testy@test.edited";
+        testData[3] = "user6@test.test";
+        testData[4] = "admin@test.test";
+        testData[5] = "user2@test.test";
+        testData[6] = "admi2n@test.test";
 
+        for (String email : testData) {
+            this.users.delete(new HashMap() {{
+                put("email", email);
+            }});
+        }
     }
-
-
 }
