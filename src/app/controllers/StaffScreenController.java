@@ -15,7 +15,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 
+import java.awt.print.Book;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Optional;
@@ -52,11 +54,11 @@ public class StaffScreenController implements Initializable {
         books.refreshTable(twg, tableBooks, searchFieldBooks, false);
         tabBooks.setOnSelectionChanged(t -> books.refreshTable(twg, tableBooks, searchFieldBooks, false));
         ContextMenu menu = new ContextMenu();
-        MenuItem removeMenuItem = new MenuItem("Remove Fine");
-        MenuItem editUserContactInfo = new MenuItem("Write Potato");
-        menu.getItems().addAll(removeMenuItem, editUserContactInfo);
+        MenuItem removeFineContextMenuItem = new MenuItem("Remove Fine");
+        MenuItem makeAdminContextMenuItem = new MenuItem("Make an administrator");
+        MenuItem removeAdminContextMenuItem = new MenuItem("Remove admin access");
+        menu.getItems().addAll(removeFineContextMenuItem, makeAdminContextMenuItem, removeAdminContextMenuItem);
         tableUsers.setContextMenu(menu);
-
 
         searchFieldUsers.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
@@ -70,7 +72,6 @@ public class StaffScreenController implements Initializable {
 
         this.refreshTable(false);
 
-
         searchFieldBooks.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 books.refreshTable(twg, tableBooks, searchFieldBooks, false);
@@ -80,7 +81,6 @@ public class StaffScreenController implements Initializable {
         searchFieldBooks.setOnKeyReleased(keyEvent -> {
             books.refreshTable(twg, tableBooks, searchFieldBooks, false);
         });
-
 
         tableBooks.setRowFactory(tv -> {
             TableRow<Books> row = new TableRow<>();
@@ -100,7 +100,7 @@ public class StaffScreenController implements Initializable {
         });
 
         //right click on user on staff user list. Option Remove Fine;
-        removeMenuItem.setOnAction(event -> {
+        removeFineContextMenuItem.setOnAction(event -> {
             Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you want to remove debt for User " + Users.getLoggedInUserName());
 
             if (result.get() == ButtonType.OK) {
@@ -111,16 +111,34 @@ public class StaffScreenController implements Initializable {
                 int row = Integer.parseInt(twg.getRowValue(tableUsers, 0));
                 users.update(fine, row);
                 this.refreshTable(false);
-            } else {
-                // ... user chose CANCEL or closed the dialog
             }
-
         });
 
-        //right click on user on staff user list. Option Write Potato
-        editUserContactInfo.setOnAction(event -> {
-            System.out.println("Potato");
+        //right click on user on staff user list. Option Make administrator
+        makeAdminContextMenuItem.setOnAction(event -> {
+            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you want to make " + Users.getLoggedInUserName() + " an admin?");
 
+            if (result.get() == ButtonType.OK) {
+                HashMap fine = new HashMap();
+                Users users = new Users();
+                fine.put("permission", "1");
+                int row = Integer.parseInt(twg.getRowValue(tableUsers, 0));
+                users.update(fine, row);
+                this.refreshTable(false);
+            }
+        });
+
+        removeAdminContextMenuItem.setOnAction(event -> {
+            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you remove admin access from " + Users.getLoggedInUserName());
+
+            if (result.get() == ButtonType.OK) {
+                HashMap fine = new HashMap();
+                Users users = new Users();
+                fine.put("permission", "0");
+                int row = Integer.parseInt(twg.getRowValue(tableUsers, 0));
+                users.update(fine, row);
+                this.refreshTable(false);
+            }
         });
     }
 
@@ -143,7 +161,7 @@ public class StaffScreenController implements Initializable {
 
             twg.setTable(query.build(), tableUsers);
         } catch (java.lang.Exception e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
     }
 

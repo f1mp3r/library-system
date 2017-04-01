@@ -1,5 +1,6 @@
 package app.models;
 
+import app.utils.Screen;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
@@ -36,7 +37,6 @@ public class Reservations extends Model {
         HashMap<String, String> result = new HashMap();
         try {
             String selectQuery = ("select * from reservations where user_id=" + userId + " AND book_id=" + bookId + " AND title=" + title);
-            System.out.println(selectQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
@@ -54,7 +54,7 @@ public class Reservations extends Model {
 
             statement.getConnection().close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return result;
@@ -67,7 +67,6 @@ public class Reservations extends Model {
         try {
             String selectQuery = "SELECT MIN(date_left), (user_id) FROM reservations where title=" + "'" + title + "'";
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
-            System.out.println(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
 

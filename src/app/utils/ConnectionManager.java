@@ -76,13 +76,13 @@ public class ConnectionManager {
 
             try {
                 con = (Connection) DriverManager.getConnection(this.dblink, this.user, this.password);
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
                 // log an exception
-                System.out.println("Failed to create the database connection.");
+                Screen.exception(e, "Failed to create the database connection.");
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException e) {
             // log an exception
-            System.out.println("Driver not found.");
+            Screen.exception(e, "Driver not found.");
         }
 
         return con;

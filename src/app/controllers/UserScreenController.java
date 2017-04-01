@@ -101,7 +101,6 @@ public class UserScreenController implements Initializable {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     //return selected Book
-                    System.out.println("Click return");
                     books.returnBook(userLoansTable);
                 }
             });

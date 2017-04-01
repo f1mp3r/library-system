@@ -25,21 +25,16 @@ public class ModelTest extends TestCase {
         newUser.put("permission", 0);
         users.insert(newUser);
         HashMap data = users.getByColumn("student_id", "test1");
-        System.out.println(data);
         assertEquals("test1", data.get("student_id"));
         assertEquals("test3", data.get("first_name"));
         assertEquals("test4", data.get("last_name"));
         assertEquals("test5", data.get("phone_number"));
         assertEquals("test@test.test", data.get("email"));
         assertEquals("0", data.get("permission"));
-
-
     }
 
     @Test
     public void testGetByColumn() throws Exception {
-
-
         HashMap newUser = new HashMap();
         newUser.put("student_id", "test11");
         newUser.put("password", "test22");
@@ -51,15 +46,12 @@ public class ModelTest extends TestCase {
         users.insert(newUser);
 
         HashMap data = users.getByColumn("student_id", "test11");
-        System.out.println(data);
         assertEquals("test11", data.get("student_id"));
         assertEquals("test33", data.get("first_name"));
         assertEquals("test44", data.get("last_name"));
         assertEquals("test55", data.get("phone_number"));
         assertEquals("test66@test.test", data.get("email"));
         assertEquals("0", data.get("permission"));
-
-
     }
 
     @Test

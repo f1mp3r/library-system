@@ -1,6 +1,7 @@
 package app.models;
 
 import app.utils.QueryBuilder;
+import app.utils.Screen;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
@@ -33,13 +34,12 @@ public class Loans extends Model {
 
         try {
             String countQuery = String.format("select count(*) from loans where user_id = '%s' AND returned = 0", userId);
-            System.out.println(countQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(countQuery);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             rowCount = resultSet.getInt("count(*)");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return rowCount;
@@ -57,7 +57,7 @@ public class Loans extends Model {
                 return false;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return true;
@@ -75,7 +75,6 @@ public class Loans extends Model {
                     .where("id", "=", userId, "users")
                     .where("returned", "=", "0", "loans")
                     .build();
-            System.out.println(selectQuery + "!!!!!!!!!!!!!!!!!!!!!!!!!");
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
@@ -93,7 +92,7 @@ public class Loans extends Model {
 
             statement.getConnection().close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return result;
@@ -112,11 +111,8 @@ public class Loans extends Model {
             while (resultSet.next()) {
 
                 Date due = resultSet.getDate("date_due");
-                System.out.println(resultSet.getDate("date_due"));
                 if (due.before(new Date())) {
                     x = true;
-                } else {
-                    System.out.println("nada");
                 }
 
 

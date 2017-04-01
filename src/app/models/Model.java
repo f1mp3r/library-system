@@ -1,6 +1,7 @@
 package app.models;
 
 import app.utils.ConnectionManager;
+import app.utils.Screen;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
@@ -48,7 +49,7 @@ public class Model {
             rowsChanged = statement.getUpdateCount();
             statement.getConnection().close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return rowsChanged;
@@ -61,7 +62,6 @@ public class Model {
                     "UPDATE `" + this.table + "` SET %s WHERE id = %d", "%s",
                     id
             );
-            System.out.println(updateQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(updateQuery);
 
             Set set = data.entrySet();
@@ -81,13 +81,12 @@ public class Model {
 
             }
             updateQuery = String.format(updateQuery, fields);
-            System.out.println(updateQuery);
 
             statement.executeUpdate(updateQuery);
             rowsChanged = statement.getUpdateCount();
             statement.getConnection().close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return rowsChanged;
@@ -101,7 +100,6 @@ public class Model {
                     String.join(", ", data.keySet()),
                     String.join(", ", Collections.nCopies(data.size(), "?"))
             );
-            System.out.println(insertQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(insertQuery);
 
             Set set = data.entrySet();
@@ -117,7 +115,7 @@ public class Model {
             rowsChanged = statement.getUpdateCount();
             statement.getConnection().close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return rowsChanged;
@@ -134,7 +132,6 @@ public class Model {
         HashMap<String, String> result = new HashMap();
         try {
             String selectQuery = String.format("SELECT * FROM `" + this.table + "` WHERE `%s` = '%s'", column, id);
-            System.out.println(selectQuery);
             PreparedStatement statement = (PreparedStatement) this.connection.getConnection().prepareStatement(selectQuery);
 
             ResultSet resultSet = statement.executeQuery(selectQuery);
@@ -152,7 +149,7 @@ public class Model {
 
             statement.getConnection().close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return result;
@@ -168,17 +165,32 @@ public class Model {
         return this.getByColumn("id", String.valueOf(id));
     }
 
-    public ArrayList<HashMap> getAll() {
-        String query = String.format("SELECT * FROM `%s`", this.table);
-        System.out.println(query);
-        return null;
-    }
-
     public String quote(String variable) {
         return "'" + variable + "'";
     }
 
     public String toString() {
         return String.join(",", this.columns);
+    }
+
+    public int getCount() {
+        int count = 0;
+
+        try{
+            PreparedStatement preparedStatement = (PreparedStatement) this
+                    .connection
+                    .getConnection()
+                    .prepareStatement("SELECT count(id) FROM " + this.table);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            count = resultSet.getInt(1);
+        }
+        catch(Exception e)
+        {
+            Screen.exception(e);
+        }
+
+        return count;
     }
 }

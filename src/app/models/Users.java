@@ -1,6 +1,7 @@
 package app.models;
 
 import app.utils.QueryBuilder;
+import app.utils.Screen;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
@@ -22,7 +23,8 @@ public class Users extends Model {
             "@last_name as `Last Name`",
             "@student_id as `Student ID`",
             "@phone_number as `Phone Number`",
-            "@debt as `Fine`"
+            "@CONCAT('£', debt) as `Fine`",
+            "@IF(permission = 1, 'Administrator', 'User') as `User type`"
     };
 
     private static int id;
@@ -46,7 +48,7 @@ public class Users extends Model {
             byte[] digest = md.digest();
             newHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
         } catch (NoSuchAlgorithmException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
 
         return newHash;
@@ -73,7 +75,7 @@ public class Users extends Model {
 
         try {
             Connection connection = this.connection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `users` WHERE student_Id = ? AND password = ? AND permission = ? ");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `users` WHERE student_id = ? AND password = ? AND permission = ? ");
             statement.setString(1, studentId);
             statement.setString(2, Users.hash(password));
             statement.setBoolean(3, staffOnly);
@@ -88,8 +90,8 @@ public class Users extends Model {
             } else {
                 return false;
             }
-        } catch (Exception exc) {
-            System.out.println(exc.getMessage());
+        } catch (Exception e) {
+            Screen.exception(e);
         }
 
         return false;

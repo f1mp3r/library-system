@@ -22,7 +22,6 @@ public class UsersTest extends TestCase {
         newUser.put("phone_number", "test55");
         newUser.put("email", "user6@test.test");
         newUser.put("permission", 0);
-        System.out.println(newUser);
         users.insert(newUser);
 
         HashMap newUserInvalid = new HashMap();

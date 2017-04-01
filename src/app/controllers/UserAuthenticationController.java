@@ -64,13 +64,13 @@ public class UserAuthenticationController {
                     this.loadLibraryHomeScreenViewForStaff();
                 } else {
                     this.loadLibraryHomeScreenView();
+
                     if (loans.checkIfDue(Users.getLoggedInUserTableID())) {
                         Screen.popup("WARNING", "You have Books Overdue");
                     }
-
                 }
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                Screen.exception(e);
             }
         } else {
             this.infoBox.setText("Invalid Login");
@@ -115,33 +115,27 @@ public class UserAuthenticationController {
             newUser.put("last_Name", reg3.getText());
             newUser.put("phone_number", reg4.getText());
             newUser.put("email", reg5.getText());
-            newUser.put("permission", false);
+            newUser.put("permission", this.users.getCount() == 0); // if there are no users, the first user is an admin
 
-            //check if email is in use
+            // check if email is in use
             int emailExistCheck = users.getByColumn("email", reg5.getText()).size();
             HashMap checkStudentID = users.getByColumn("student_id", reg1.getText());
 
             if (emailExistCheck == 0 & (!checkStudentID.containsKey("student_id"))) {
-                ///email not in use, continue
+                // email not in use, continue
                 users.insert(newUser);
                 Screen.popup("CONFIRMATION", "Registration Successful");
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             } else if (checkStudentID.containsKey("student_id")) {
-
                 Screen.popup("WARNING", "Student-ID already in use");
-
             } else {
-
                 //a user was found with that email
                 Screen.popup("WARNING", "Email already in use");
-
             }
         } else {
             Screen.popup("ERROR", InputValidation.getErrorList());
             InputValidation.getErrorList().clear();
         }
-
-
     }
 
     @FXML
@@ -155,6 +149,4 @@ public class UserAuthenticationController {
         ((Node) (event.getSource())).getScene().getWindow().hide();
         this.screen.loadView("StaffLogin", "StaffLogin");
     }
-
-
 }

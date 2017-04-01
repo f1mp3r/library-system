@@ -9,9 +9,7 @@ import javafx.scene.control.TextField;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -26,7 +24,6 @@ public class Books extends Model {
             "@authors as `Authors`",
             "@location as `Location in library`",
             "@copies_in_stock `Copies available`",
-
     };
 
     public Books() {
@@ -103,7 +100,6 @@ public class Books extends Model {
 
 
             int earliestUserIdToReserve = rez.getEarliestDate(bookTitle);
-            System.out.println(earliestUserIdToReserve + "KK");
 
 
             if (checkReservationBookId == bookId && checkReservationId == Users.getLoggedInUserTableID() && copiesAvailable > 0 && earliestUserIdToReserve == Users.getLoggedInUserTableID()) {
@@ -223,7 +219,6 @@ public class Books extends Model {
         twg.setTable(users.getLoanedBooksQuery(), userLoansTable);
     }
 
-
     public void refreshTable(TableViewControls table, TableView tableView, TextField searchField, boolean forceEmpty) {
         String searchKey = "%" + searchField.getText() + "%";
         QueryBuilder queryBooks = new QueryBuilder("books");
@@ -236,7 +231,107 @@ public class Books extends Model {
 
             table.setTable(query.build(), tableView);
         } catch (java.lang.Exception e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
+    }
+
+    /**
+     * Seed library with books
+     */
+    public void seedBooks() {
+        ArrayList<HashMap> books = new ArrayList<>();
+
+        books.add(new HashMap() {{
+            put("isbn", "1408708981");
+            put("title", "Fantastic Beasts and Where to Find Them");
+            put("location", "C17");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "J.K. Rowling");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "1408855682");
+            put("title", "Harry Potter and the Goblet of Fire: 4/7 (Harry Potter 4)");
+            put("location", "D18");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "J.K. Rowling");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "1408855690");
+            put("title", "Harry Potter and the Order of the Phoenix: 5/7 (Harry Potter 5)");
+            put("location", "A10");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "J.K. Rowling");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "1408855704");
+            put("title", "Harry Potter and the Half-Blood Prince: 6/7 (Harry Potter 6)");
+            put("location", "A14");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "J.K. Rowling");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "1408855712");
+            put("title", "Harry Potter and the Deathly Hallows: 7/7 (Harry Potter 7)");
+            put("location", "A16");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "J.K. Rowling");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "0007548230");
+            put("title", "A Game of Thrones (A Song of Ice and Fire, Book 1)");
+            put("location", "A10");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "George R.R. Martin");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "0241246105");
+            put("title", "The Man in the High Castle");
+            put("location", "C10");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "Philip K. Dick");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "1544118953");
+            put("title", "The Secret of Spellshadow Manor");
+            put("location", "A13");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "Bella Forrest");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "1408886812");
+            put("title", "Norse Mythology");
+            put("location", "D04");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "Neil Gaiman");
+        }});
+        books.add(new HashMap() {{
+            put("isbn", "1410464199");
+            put("title", "The Humans");
+            put("location", "S23");
+            put("copies_in_stock", "15");
+            put("currently_on_loan", "0");
+            put("currently_reserved", "0");
+            put("authors", "Matt Haig");
+        }});
+
+        books.forEach(this::insert);
     }
 }

@@ -33,7 +33,7 @@ ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 CREATE TABLE books(
 `id` int NOT NULL auto_increment PRIMARY KEY,
 `isbn`	VARCHAR(13)      NOT NULL,
-`title`	VARCHAR(60)		NOT NULL,
+`title`	VARCHAR(150)		NOT NULL,
 `location` VARCHAR(10)	NOT NULL,
 `copies_in_stock`		INT		NOT NULL DEFAULT 0,
 `currently_on_loan`  INT	NOT NULL DEFAULT 0,
@@ -63,10 +63,6 @@ UNIQUE (email),
 UNIQUE (student_id)
 )
 ENGINE=INNODB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-INSERT INTO books (isbn,title,location,copies_in_stock,currently_on_loan,authors) VALUES ("65464456","Book about stuff","C-40-41",90,0,"Potato");					
-
-
 
 # CHANGES
 ALTER TABLE `loans` CHANGE `returned` `returned` BOOLEAN NOT NULL DEFAULT FALSE;

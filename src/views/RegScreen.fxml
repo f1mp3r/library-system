@@ -18,18 +18,18 @@
             <Font name="Bodoni MT" size="36.0" />
          </font>
       </Text>
+      <TextField fx:id="reg1" layoutX="115.0" layoutY="100.0" />
       <TextField fx:id="reg2" layoutX="115.0" layoutY="136.0" />
       <TextField fx:id="reg3" layoutX="115.0" layoutY="172.0" />
       <TextField fx:id="reg4" layoutX="115.0" layoutY="209.0" />
       <TextField fx:id="reg5" layoutX="115.0" layoutY="246.0" />
+      <PasswordField fx:id="reg6" layoutX="115.0" layoutY="282.0" />
       <Text layoutX="29.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="StudentID" />
+      <Text layoutX="26.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name" />
       <Text layoutX="26.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name" />
       <Text layoutX="13.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number" />
       <Text layoutX="46.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
       <Text layoutX="32.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-      <TextField fx:id="reg1" layoutX="115.0" layoutY="100.0" />
-      <Text layoutX="26.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name" />
       <Button layoutX="124.0" layoutY="330.0" mnemonicParsing="false" onAction="#onRegisterSubmit" prefHeight="43.0" prefWidth="149.0" text="Create" />
-      <PasswordField fx:id="reg6" layoutX="115.0" layoutY="282.0" />
    </children>
 </Pane>

@@ -24,7 +24,6 @@ public class Screen {
     }
 
     public static void popup(String type, ArrayList<String> message) {
-        System.out.println(message);
         Alert alert = new Alert(Alert.AlertType.valueOf(type));
         alert.setContentText(String.join("\r\n", message));
         alert.showAndWait();
@@ -38,6 +37,14 @@ public class Screen {
        return result;
     }
 
+    public static Optional<ButtonType> exception(Exception e) {
+        return Screen.exception(e, "");
+    }
+
+    public static Optional<ButtonType> exception(Exception e, String customMessage) {
+        return Screen.popup("ERROR", customMessage.isEmpty() ? e.getMessage() : customMessage);
+    }
+
     public void loadView(String viewFile, String title) {
         try {
             Parent root = null;
@@ -48,7 +55,7 @@ public class Screen {
             errorStage.centerOnScreen();
             errorStage.show();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            Screen.exception(e);
         }
     }
 

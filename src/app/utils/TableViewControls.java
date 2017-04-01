@@ -46,8 +46,7 @@ public class TableViewControls {
             TableFilter.forTableView(tableView).apply();
             conn.getInstance().getConnection().close();
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error While Building Table");
+            Screen.exception(e, "Error while building table");
         }
     }
 
