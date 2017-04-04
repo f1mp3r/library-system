@@ -36,6 +36,8 @@ public class InputValidationTest extends TestCase {
         assertEquals(true, passwordGood);
         assertEquals(false, passwordBad1);
         assertEquals(false, passwordBad2);
+        assertEquals(false, passwordBad3);
+
         assertEquals(false, passwordBad4);
     }
 
