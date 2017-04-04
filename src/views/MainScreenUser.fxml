@@ -34,17 +34,17 @@
                             <columns>
                             </columns>
                         </TableView>
-                        <Text layoutX="604.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Books that you are currently borrowing:">
+                        <Text layoutX="604.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Books currently borrowed:">
                             <font>
                                 <Font name="Constantia" size="30.0" />
                             </font>
                         </Text>
-                        <Text layoutX="604.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Just double click the book if you want to return it." />
+                        <Text layoutX="604.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double click a book to return it to the Library." />
                         <Button layoutX="456.0" layoutY="763.0" mnemonicParsing="false" onAction="#refreshUserLoanTable" prefHeight="42.0" prefWidth="127.0" text="Refresh" />
                   <MenuButton layoutX="1142.0" layoutY="71.0" mnemonicParsing="false" text="Change Contact Details">
                     <items>
-                      <MenuItem fx:id="changePhone" mnemonicParsing="false" text="Change Phone Number" />
-                      <MenuItem fx:id="changeEmail" mnemonicParsing="false" text="Change Email" />
+                      <MenuItem fx:id="changePhone" mnemonicParsing="false" text="Change phone number" />
+                      <MenuItem fx:id="changeEmail" mnemonicParsing="false" text="Change e-mail" />
                     </items>
                   </MenuButton>
                     </children>

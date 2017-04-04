@@ -48,7 +48,7 @@ public class UserScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         changeEmail.setOnAction((ActionEvent a) -> {
 
-            Optional<String> result = Screen.makeSingleInputDialog(changeEmail, "Enter New Email here", "Email Change", "Email Change", "Please enter your new Email");
+            Optional<String> result = Screen.makeSingleInputDialog(changeEmail, "Enter your new e-mail here.", "Email Change", "Email Change", "Please enter your new e-mail.");
             result.ifPresent(input -> {
                 if (InputValidation.isValidEmailAddress(input) && InputValidation.lengthCheck(input)) {
                     HashMap updateData = new HashMap();
@@ -57,10 +57,10 @@ public class UserScreenController implements Initializable {
                         updateData.put("email", ("'" + input + "'"));
 
                         if (1 == users.update(updateData, Users.getLoggedInUserTableID())) {
-                            Screen.popup("INFORMATION", "You have successfully updated your email address!");
+                            Screen.popup("INFORMATION", "You have successfully updated your e-mail address!");
                         }
                     } else {
-                        Screen.popup("WARNING", "Sorry, this email is  already in use");
+                        Screen.popup("WARNING", "This e-mail is already in use.");
                     }
                 } else {
                     Screen.popup("WARNING", InputValidation.getErrorList());
@@ -70,7 +70,7 @@ public class UserScreenController implements Initializable {
         });
 
         changePhone.setOnAction((ActionEvent a) -> {
-            Optional<String> result = Screen.makeSingleInputDialog(changePhone, "Enter New Phone number here", "Phone Number Change", "Phone Number Change", "Please enter your new Phone Number");
+            Optional<String> result = Screen.makeSingleInputDialog(changePhone, "Enter new phone number here.", "Phone Number Change", "Phone Number Change", "Please enter your new phone number.");
 
             result.ifPresent(input -> {
                 if (InputValidation.isValidPhoneNumber(input) && InputValidation.lengthCheck(input)) {

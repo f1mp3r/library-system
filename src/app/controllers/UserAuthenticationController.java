@@ -66,7 +66,7 @@ public class UserAuthenticationController {
                     this.loadLibraryHomeScreenView();
 
                     if (loans.checkIfDue(Users.getLoggedInUserTableID())) {
-                        Screen.popup("WARNING", "You have Books Overdue");
+                        Screen.popup("WARNING", "You have books overdue.");
                     }
                 }
             } catch (IOException e) {
@@ -88,11 +88,11 @@ public class UserAuthenticationController {
     }
 
     public void loadLibraryHomeScreenView() throws IOException {
-        this.screen.loadView("MainScreenUser", "Navigation");
+        this.screen.loadView("MainScreenUser", "Student Area");
     }
 
     public void loadLibraryHomeScreenViewForStaff() throws IOException {
-        this.screen.loadView("MainScreenStaff", "Navigation");
+        this.screen.loadView("MainScreenStaff", "Staff Area");
     }
 
     @FXML
@@ -123,13 +123,13 @@ public class UserAuthenticationController {
             if (emailExistCheck == 0 & (!checkStudentID.containsKey("student_id"))) {
                 // email not in use, continue
                 users.insert(newUser);
-                Screen.popup("CONFIRMATION", "Registration Successful");
+                Screen.popup("CONFIRMATION", "Registration successful.");
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             } else if (checkStudentID.containsKey("student_id")) {
-                Screen.popup("WARNING", "Student-ID already in use");
+                Screen.popup("WARNING", "The Student-ID already exists.");
             } else {
                 //a user was found with that email
-                Screen.popup("WARNING", "Email already in use");
+                Screen.popup("WARNING", "Email already in use.");
             }
         } else {
             Screen.popup("ERROR", InputValidation.getErrorList());
@@ -139,13 +139,13 @@ public class UserAuthenticationController {
 
     @FXML
     void onMemberLogin(ActionEvent event) throws IOException {
-        this.screen.loadView("UserLogin", "Registration");
+        this.screen.loadView("UserLogin", "Student Login");
         ((Node) (event.getSource())).getScene().getWindow().hide();
     }
 
     @FXML
     void onStaffLogin(ActionEvent event) throws IOException {
         ((Node) (event.getSource())).getScene().getWindow().hide();
-        this.screen.loadView("StaffLogin", "StaffLogin");
+        this.screen.loadView("StaffLogin", "Staff Login");
     }
 }

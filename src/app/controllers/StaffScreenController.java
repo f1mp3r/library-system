@@ -54,9 +54,9 @@ public class StaffScreenController implements Initializable {
         books.refreshTable(twg, tableBooks, searchFieldBooks, false);
         tabBooks.setOnSelectionChanged(t -> books.refreshTable(twg, tableBooks, searchFieldBooks, false));
         ContextMenu menu = new ContextMenu();
-        MenuItem removeFineContextMenuItem = new MenuItem("Remove Fine");
-        MenuItem makeAdminContextMenuItem = new MenuItem("Make an administrator");
-        MenuItem removeAdminContextMenuItem = new MenuItem("Remove admin access");
+        MenuItem removeFineContextMenuItem = new MenuItem("Remove fine");
+        MenuItem makeAdminContextMenuItem = new MenuItem("Upgrade user to admin");
+        MenuItem removeAdminContextMenuItem = new MenuItem("Remove admin privileges");
         menu.getItems().addAll(removeFineContextMenuItem, makeAdminContextMenuItem, removeAdminContextMenuItem);
         tableUsers.setContextMenu(menu);
 
@@ -101,7 +101,7 @@ public class StaffScreenController implements Initializable {
 
         //right click on user on staff user list. Option Remove Fine;
         removeFineContextMenuItem.setOnAction(event -> {
-            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you want to remove debt for User " + Users.getLoggedInUserName());
+            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you want to remove the fine for student " + Users.getLoggedInUserName());
 
             if (result.get() == ButtonType.OK) {
                 // ... user chose OK
@@ -129,7 +129,7 @@ public class StaffScreenController implements Initializable {
         });
 
         removeAdminContextMenuItem.setOnAction(event -> {
-            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you remove admin access from " + Users.getLoggedInUserName());
+            Optional<ButtonType> result = Screen.popup("CONFIRMATION", "Are you sure you want to remove admin privileges from " + Users.getLoggedInUserName());
 
             if (result.get() == ButtonType.OK) {
                 HashMap fine = new HashMap();
@@ -145,7 +145,7 @@ public class StaffScreenController implements Initializable {
 
     @FXML
     void addBook(ActionEvent event) {
-        Dialog dialog = Screen.dialogEditBook("Add book", "Add new book");
+        Dialog dialog = Screen.dialogEditBook("Add book", "Add new book to the Library");
         this.setupEditFields(dialog, new HashMap());
     }
 
@@ -259,12 +259,12 @@ public class StaffScreenController implements Initializable {
                     twg.setTable(queryBooks.select(Books.memberVisibleFields).build(), tableBooks);
 
                 } else {
-                    Screen.popup("WARNING", "A Book with the same isbn already exists, please edit the existing entry instead.");
+                    Screen.popup("WARNING", "The ISBN typed in already exists, please edit the existing entry.");
                     clickEvent.consume();
                 }
 
             } catch (NumberFormatException e) {
-                Screen.popup("WARNING", "The copies field should contain a number");
+                Screen.popup("WARNING", "The 'copies' field should contain a number.");
                 clickEvent.consume();
             }
         });
