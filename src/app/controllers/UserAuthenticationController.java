@@ -102,6 +102,7 @@ public class UserAuthenticationController {
 
     @FXML
     void onRegisterSubmit(ActionEvent event) throws SQLDataException {
+        String admin = "0";
         HashMap<String, String> newUser = new HashMap();
         newUser.put("student_id", registerStudentIdField.getText());
         newUser.put("password", registerPasswordField.getText());
@@ -109,7 +110,10 @@ public class UserAuthenticationController {
         newUser.put("last_name", lastNameField.getText());
         newUser.put("phone_number", phoneNumberField.getText());
         newUser.put("email", emailField.getText());
-        newUser.put("permission", String.valueOf(this.users.getCount() == 0)); // if there are no users, the first user is an admin
+        if(this.users.getCount()==0) {
+            admin = "1";
+        }
+        newUser.put("permission", admin); // if there are no users, the first user is an admin
 
         if (this.users.validate(newUser)) {
             // check if email is in use
