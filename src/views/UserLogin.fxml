@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.UserAuthenticationController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.UserAuthenticationController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -65,7 +65,7 @@
    <center>
       <ImageView fitHeight="320.0" fitWidth="370.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../assets/images/pexels-photo-230712.jpeg" />
+            <Image url="@../assets/images/student-login.jpeg" />
          </image>
       </ImageView>
    </center>

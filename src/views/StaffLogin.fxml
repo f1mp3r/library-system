@@ -54,7 +54,7 @@
             </Text>
             <ImageView layoutX="75.0" layoutY="231.0">
                <image>
-                  <Image url="@../assets/images/key-146673_640.png" />
+                  <Image url="@../assets/images/admin-login.png" />
                </image>
             </ImageView>
          </children>
@@ -69,7 +69,7 @@
    <center>
       <ImageView fitHeight="320.0" fitWidth="370.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../assets/images/pexels-photo-230712.jpeg" />
+            <Image url="@../assets/images/student-login.jpeg" />
          </image>
       </ImageView>
    </center>
